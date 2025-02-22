@@ -8,9 +8,10 @@ COPY package.json yarn.lock .npmrc* ./
 
 COPY ./tsconfig.json ./tsconfig.json
 
-COPY . .
 
 RUN yarn install --frozen-lockfile --network-timeout 1000000 
+
+COPY . .
 
 RUN yarn run build
 
