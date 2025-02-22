@@ -28,7 +28,7 @@ export const AuthForm: FC<AuthFormProps> = ({ type }) => {
                 try {
                     const res = await $fetch(type === 'login' ? `/auth/login/` : `/auth/register`, {
                         method: 'POST',
-                        body: JSON.stringify({ email, password }),
+                        body: JSON.stringify(type === 'login' ? { username: email, password } : { email, password }),
                         credentials: 'include',
                     })
                     if (res.ok) {
