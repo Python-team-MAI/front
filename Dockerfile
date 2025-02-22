@@ -12,9 +12,9 @@ COPY . .
 
 RUN ls -a ./src/entities
 
-RUN yarn install --frozen-lockfile --network-timeout 1000000
+RUN npm install --frozen-lockfile --network-timeout 1000000
 
-RUN yarn build
+RUN npm run build
 
 FROM node:20-alpine AS production
 
@@ -22,7 +22,7 @@ WORKDIR /app
 
 COPY package.json yarn.lock ./
 
-RUN yarn install --production --frozen-lockfile
+RUN npm install --production --frozen-lockfile
 
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
@@ -30,4 +30,4 @@ COPY --from=builder /app/next.config.ts ./
 
 ENV NODE_ENV production
 EXPOSE 3000
-CMD ["yarn", "start", "-H", "0.0.0.0", "-p", "3000"]
+CMD ["npm", "run", "start", "-H", "0.0.0.0", "-p", "3000"]
