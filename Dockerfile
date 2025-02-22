@@ -4,15 +4,13 @@ WORKDIR /app
 
 RUN apk add --no-cache ca-certificates
 
-COPY package.json yarn.lock .npmrc* ./
+COPY package.json package-lock.json .npmrc* ./
 
 COPY ./tsconfig.json ./tsconfig.json
 
 COPY . .
 
-RUN ls -a ./src/entities
-
-RUN npm install --frozen-lockfile --network-timeout 1000000
+RUN npm install --frozen-lockfile --network-timeout 1000000 --force
 
 RUN npm run build
 
@@ -22,7 +20,7 @@ WORKDIR /app
 
 COPY package.json yarn.lock ./
 
-RUN npm install --production --frozen-lockfile
+RUN npm install --production --frozen-lockfile --force
 
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
