@@ -1,13 +1,13 @@
 import createMiddleware from 'next-intl/middleware'
 import { routing } from './entities/i18n/routing'
 import { NextRequest, NextResponse } from 'next/server'
-import { SESSION_TOKEN } from './shared/constants/tokens'
+import { ACCESS_TOKEN } from './shared/constants/tokens'
 
 export default async function middleWare(request: NextRequest) {
-    const sessionToken = request.cookies.get(SESSION_TOKEN)
+    const accessToken = request.cookies.get(ACCESS_TOKEN)
     const pathname = request.nextUrl.pathname
     let locale
-    console.log('token', sessionToken)
+    console.log('token', accessToken)
 
     switch (pathname.slice(0, 4)) {
         case '/ru':
@@ -34,7 +34,7 @@ export default async function middleWare(request: NextRequest) {
     }
 
     if (
-        !sessionToken &&
+        !accessToken &&
         request.nextUrl.pathname !== `/${locale}/login` &&
         request.nextUrl.pathname !== `/${locale}/register`
     ) {

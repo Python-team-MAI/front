@@ -24,15 +24,11 @@
         "paths": {
             "@/navigation": ["./src/entities/i18n/routing.ts"],
             "@/fetch": ["./src/shared/lib/api/fetch.ts"],
+            "@/session": ["./src/shared/lib/sessions/SessionManager.tsx"],
             "@/public/*": ["./public/*"],
-            "@/*": ["./src/*"],
+            "@/*": ["./src/*"]
         }
     },
-    "include": [
-        "next-env.d.ts",
-        "**/*.ts",
-        "**/*.tsx",
-        ".next/types/**/*.ts",
-    ],
+    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
     "exclude": ["node_modules"]
 }

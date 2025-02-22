@@ -9,14 +9,13 @@ export default async function SignInPage(props: {
     params: Promise<{ locale: Locale }>
 }) {
     const { locale } = await props.params
-    // const { callbackUrl } = await props.searchParams
     const t = await getTranslations({ locale })
 
     return (
         <main className="min-h-screen flex flex-col justify-center items-center">
             <div className="flex flex-col gap-5 justify-center items-stretch w-1/4 max-md:w-1/2">
                 <h1 className="text-2xl text-center">{t('login')}</h1>
-                <AuthForm type="login" />
+                <AuthForm type="login" locale={locale} />
                 <div className="flex flex-col gap-1 items-center justify-stretch">
                     <GithubOAuthButton />
                     <GoogleOAuthButton />

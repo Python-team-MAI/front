@@ -1,45 +1,49 @@
-'use client'
-
 import { Button } from '@nextui-org/button'
 import { Input } from '@nextui-org/input'
 import { useTranslations } from 'next-intl'
-import { useRouter } from '@/navigation'
+import { redirect } from '@/navigation'
 import { FC } from 'react'
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '@/shared/constants/tokens'
 import { $fetch } from '@/fetch'
+import { SessionManager } from '@/session'
 
 interface AuthFormProps {
     type: 'login' | 'register'
+    locale: string
 }
 
-export const AuthForm: FC<AuthFormProps> = ({ type }) => {
+export const AuthForm: FC<AuthFormProps> = ({ type, locale }) => {
     const t = useTranslations()
-    const router = useRouter()
 
     return (
         <form
             className="flex flex-col gap-2 w-full"
             action={async (formData) => {
+                'use server'
+
                 const email = formData.get('email')?.toString()
                 const password = formData.get('password')?.toString()
                 if (!email || !password) {
                     return
                 }
+
                 try {
                     const res = await $fetch(type === 'login' ? `/auth/login/` : `/auth/register/`, {
                         method: 'POST',
                         body: JSON.stringify({ email, password }),
                         credentials: 'include',
                     })
-                    if (res.ok) {
-                        const user = await res.json()
+
+                    if (res.status === 200) {
+                        const result: { access_token: string; refresh_token: string; type: 'Bearer' } = await res.json()
                         if (type === 'login') {
-                            localStorage.setItem(ACCESS_TOKEN, user.access_token)
-                            localStorage.setItem(REFRESH_TOKEN, user.refresh_token)
-                            router.push('/')
+                            SessionManager.setSessionKey(ACCESS_TOKEN, result.access_token)
+                            SessionManager.setSessionKey(REFRESH_TOKEN, result.refresh_token)
+                            redirect({ href: '/', locale })
                         } else {
-                            router.push('/register/info')
-                            localStorage.setItem('register_id', user.id)
+                            SessionManager.setSessionKey(ACCESS_TOKEN, result.access_token)
+                            SessionManager.setSessionKey(REFRESH_TOKEN, result.refresh_token)
+                            redirect({ href: '/register/info', locale })
                         }
                         return
                     }
