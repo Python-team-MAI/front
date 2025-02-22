@@ -1,0 +1,2 @@
+export { ThreeIcon } from "./ThreeIcon";
+

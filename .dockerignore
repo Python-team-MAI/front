@@ -1,0 +1,9 @@
+node_modules
+.next
+Dockerfile
+docker-compose*
+.git
+.vscode
+coverage
+__tests__
+.env*.local
