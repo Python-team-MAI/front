@@ -26,16 +26,11 @@ export const AuthForm: FC<AuthFormProps> = ({ type }) => {
                     return
                 }
                 try {
-                    const res = await $fetch(
-                        type === 'login'
-                            ? `${process.env.NEXT_PUBLIC_API_URL}/auth/login`
-                            : `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
-                        {
-                            method: 'POST',
-                            body: JSON.stringify({ email, password }),
-                            credentials: 'include',
-                        }
-                    )
+                    const res = await $fetch(type === 'login' ? `/auth/login` : `/auth/register`, {
+                        method: 'POST',
+                        body: JSON.stringify({ email, password }),
+                        credentials: 'include',
+                    })
                     if (res.ok) {
                         const user = await res.json()
                         if (type === 'login') {
