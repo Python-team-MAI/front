@@ -33,13 +33,14 @@ export default async function middleWare(request: NextRequest) {
             break
     }
 
-    // if (
-    //     !accessToken &&
-    //     request.nextUrl.pathname !== `/${locale}/login` &&
-    //     request.nextUrl.pathname !== `/${locale}/register`
-    // ) {
-    //     return NextResponse.redirect(new URL(`/${locale || 'en'}/login`, request.url))
-    // }
+    if (
+        process.env.NODE_ENV === 'production' &&
+        !accessToken &&
+        request.nextUrl.pathname !== `/${locale}/login` &&
+        request.nextUrl.pathname !== `/${locale}/register`
+    ) {
+        return NextResponse.redirect(new URL(`/${locale || 'en'}/login`, request.url))
+    }
 
     return createMiddleware(routing)(request)
 }
