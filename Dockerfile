@@ -6,7 +6,7 @@ RUN apk add --no-cache ca-certificates
 
 COPY package.json yarn.lock .npmrc* ./
 
-RUN yarn install --frozen-lockfile --network-timeout 1000000 
+RUN yarn install --frozen-lockfile --network-timeout 1000000
 
 COPY ./tsconfig.json ./tsconfig.json
 
@@ -20,7 +20,7 @@ WORKDIR /app
 
 COPY package.json yarn.lock ./
 
-RUN yarn install --production --frozen-lockfile 
+RUN yarn install --production --frozen-lockfile --network-timeout 1000000
 
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
