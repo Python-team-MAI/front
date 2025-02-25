@@ -1,4 +1,4 @@
-// import { Avatar } from '@nextui-org/react'
+// import { Avatar } from '@heroui/avatar'
 // import { Link } from '@/entities/i18n/routing'
 // import React, { FC } from 'react'
 

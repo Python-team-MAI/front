@@ -1,13 +1,13 @@
 'use client'
 
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@nextui-org/navbar'
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/navbar"
 import Image from 'next/image'
 import { Link, useRouter } from '@/navigation'
 import moment from 'moment'
 import { ThemeSwitcher } from '@/widgets/ThemeSwitcher'
 import { LanguageSwitcher } from '@/widgets/LanguageSwitcher'
 // import { UserAvatar } from '@/widgets/UserAvatar'
-// import { Button } from '@nextui-org/button'
+// import { Button } from '@heroui/button'
 import { useTranslations } from 'next-intl'
 
 export const LongHeader = ({}) => {

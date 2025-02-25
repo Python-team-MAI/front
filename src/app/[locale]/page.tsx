@@ -1,6 +1,6 @@
 import { Locale, redirect } from '@/entities/i18n/routing'
-import { Button } from '@nextui-org/button'
-import { Card, CardFooter, CardHeader } from '@nextui-org/card'
+import { Button } from "@heroui/button"
+import { Card, CardFooter, CardHeader } from "@heroui/card"
 import { getTranslations } from 'next-intl/server'
 import Image from 'next/image'
 

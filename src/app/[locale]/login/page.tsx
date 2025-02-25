@@ -1,7 +1,7 @@
 import { Link, Locale } from '@/entities/i18n/routing'
 import { AuthForm } from '@/entities/auth'
 import { GithubOAuthButton, GoogleOAuthButton, YandexOAuthButton } from '@/widgets/AuthButtons'
-import { Link as NextUILink } from '@nextui-org/link'
+import { Link as NextUILink } from '@heroui/link'
 import { getTranslations } from 'next-intl/server'
 
 export default async function SignInPage(props: {
@@ -15,7 +15,7 @@ export default async function SignInPage(props: {
         <main className="min-h-screen flex flex-col justify-center items-center">
             <div className="flex flex-col gap-5 justify-center items-stretch w-1/4 max-md:w-1/2">
                 <h1 className="text-2xl text-center">{t('login')}</h1>
-                <AuthForm type="login" locale={locale} />
+                <AuthForm type="login" />
                 <div className="flex flex-col gap-1 items-center justify-stretch">
                     <GithubOAuthButton />
                     <GoogleOAuthButton />

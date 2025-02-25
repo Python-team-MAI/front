@@ -53,5 +53,9 @@
   "level": "Степень обучения",
   "group": "группа",
   "groups": "Группы",
-  "week": "неделя"
+  "week": "неделя",
+  "wrong email": "Неправильный формат почты",
+  "type right email": "Введи валидный формат, например, example@example.ru",
+  "no email or password": "Введите почту и пароль",
+  "wrong password or email": "Неправильный пароль или почта"
 }

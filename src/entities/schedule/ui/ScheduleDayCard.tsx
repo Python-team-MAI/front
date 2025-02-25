@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { ScheduleDay } from '../model/types/Schedule'
-import { Card } from '@nextui-org/card'
+import { Card } from "@heroui/card"
 
 interface Props {
     day: ScheduleDay

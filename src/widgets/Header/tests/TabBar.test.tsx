@@ -4,7 +4,7 @@ import * as routing from '@/entities/i18n/routing'
 import * as nextIntl from 'next-intl'
 import { TabBar } from '../ui/components/TabBar'
 
-jest.mock('@nextui-org/tabs', () => ({
+jest.mock('@heroui/tabs', () => ({
     Tabs: ({ children }: { children: React.ReactNode }) => <div data-testid="tabs">{children}</div>,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore

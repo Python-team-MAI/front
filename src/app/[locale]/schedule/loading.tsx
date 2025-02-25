@@ -3,7 +3,7 @@
 import React from 'react'
 import { getWeekRange } from '@/shared/lib/dates/getWeekRange'
 import moment from 'moment'
-import { Spinner } from '@nextui-org/react'
+import { Spinner } from '@heroui/spinner'
 import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
 
@@ -45,7 +45,7 @@ const Loading = () => {
                     <p className="text-lg">
                         {moment(start, 'DD.MM.YYYY').format('DD.MM')} - {moment(end, 'DD.MM.YYYY').format('DD.MM')}
                     </p>
-                </div>{' '}
+                </div>
             </div>
             <div className="flex justify-center items-center py-5">
                 <Spinner size="lg" />

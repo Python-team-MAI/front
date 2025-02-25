@@ -1,7 +1,7 @@
 import { Link, Locale } from '@/entities/i18n/routing'
 import { AuthForm } from '@/entities/auth'
 import { GithubOAuthButton, GoogleOAuthButton, YandexOAuthButton } from '@/widgets/AuthButtons'
-import { Link as NextUILink } from '@nextui-org/link'
+import { Link as NextUILink } from "@heroui/link"
 import { getTranslations } from 'next-intl/server'
 
 export default async function SignInPage(props: {

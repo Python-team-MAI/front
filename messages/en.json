@@ -53,5 +53,9 @@
   "level": "Education level",
   "group": "group",
   "groups": "Groups",
-  "week": "week"
+  "week": "week",
+  "wrong email": "Wrong email format",
+  "type right email": "Type valid email format, for example, mai@students.com  ",
+  "no email or password": "Type email and password",
+  "wrong password or email": "Wrong password or email"
 }

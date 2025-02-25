@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic'
-import { Spinner } from '@nextui-org/spinner'
+import { Spinner } from "@heroui/spinner"
 
 export const DynamicMap = dynamic(() => import('../Map'), {
     ssr: false,

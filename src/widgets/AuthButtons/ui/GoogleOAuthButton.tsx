@@ -1,5 +1,5 @@
 import { redirect } from '@/navigation'
-import { Button } from '@nextui-org/button'
+import { Button } from "@heroui/button"
 import React from 'react'
 import { FaGoogle } from 'react-icons/fa'
 

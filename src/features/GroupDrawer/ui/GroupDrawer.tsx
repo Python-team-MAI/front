@@ -1,6 +1,6 @@
 'use client'
 import { Group, GroupSelector } from '@/entities/group'
-import { Drawer, DrawerContent, DrawerHeader } from '@nextui-org/drawer'
+import { Drawer, DrawerContent, DrawerHeader } from "@heroui/drawer"
 import { useTranslations } from 'next-intl'
 import { useRouter } from '@/navigation'
 import React, { FC, ReactNode, useEffect, useState } from 'react'

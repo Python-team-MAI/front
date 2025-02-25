@@ -1,7 +1,7 @@
 import React from 'react'
 import { redirect } from '@/navigation'
 import { FaYandex } from 'react-icons/fa'
-import { Button } from '@nextui-org/button'
+import { Button } from "@heroui/button"
 
 export const YandexOAuthButton = () => {
     return (

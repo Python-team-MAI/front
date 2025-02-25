@@ -1,8 +1,8 @@
 'use client'
 
 import { Group, GroupSelector } from '@/entities/group'
-import { Button } from '@nextui-org/button'
-import { Input } from '@nextui-org/input'
+import { Button } from "@heroui/button"
+import { Input } from "@heroui/input"
 import { useTranslations } from 'next-intl'
 import { FC, ReactNode, useState } from 'react'
 

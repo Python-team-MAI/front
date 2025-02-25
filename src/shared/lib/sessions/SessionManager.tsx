@@ -1,9 +1,9 @@
 import { cookies } from 'next/headers'
 
 export class SessionManager {
-    static async getSession(key?: string) {
+    static async getSession(key: string) {
         const cookieStore = await cookies()
-        return key ? cookieStore.get(key) : cookieStore.getAll()
+        return cookieStore.get(key)?.value
     }
 
     static async deleteSessionKey(key: string) {

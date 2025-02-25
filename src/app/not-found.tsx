@@ -1,10 +1,9 @@
 import { routing } from '@/navigation'
 import { Providers } from './[locale]/providers'
 import './[locale]/globals.css'
-// import { NotFoundPage } from '@/widgets/NotFoundPage'
-import { Navbar, NavbarBrand, NavbarContent } from '@nextui-org/navbar'
+import { Navbar, NavbarBrand, NavbarContent } from '@heroui/navbar'
 import Image from 'next/image'
-import { Button } from '@nextui-org/button'
+import { Button } from '@heroui/button'
 import { redirect } from 'next/navigation'
 
 const messages = {
@@ -58,7 +57,6 @@ const NotFound = () => {
                             </div>
                         </div>
                     </div>
-                    {/* <NotFoundPage /> */}
                 </Providers>
             </body>
         </html>

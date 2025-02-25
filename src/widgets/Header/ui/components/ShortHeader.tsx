@@ -1,6 +1,6 @@
 'use client'
 
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@nextui-org/navbar'
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/navbar"
 import Image from 'next/image'
 import React from 'react'
 import { ThemeSwitcher } from '../../../ThemeSwitcher'

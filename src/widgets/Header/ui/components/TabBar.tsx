@@ -1,6 +1,6 @@
 'use client'
 
-import { Tab, Tabs } from '@nextui-org/tabs'
+import { Tab, Tabs } from "@heroui/tabs"
 import { usePathname } from '@/entities/i18n/routing'
 import React from 'react'
 import { useLocale } from 'next-intl'

@@ -1,6 +1,4 @@
-'use client'
-
-import { Navbar, NavbarBrand, NavbarContent } from '@nextui-org/navbar'
+import { Navbar, NavbarBrand, NavbarContent } from "@heroui/navbar"
 import Image from 'next/image'
 import React from 'react'
 import { useTranslations } from 'next-intl'

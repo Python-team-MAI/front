@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import testMap1 from '@/public/maps/test_map_1.json'
 import testMap2 from '@/public/maps/test_map_2.json'
 import vertConnections from '@/public/maps/all_vertical_connections.json'
-import { Button } from '@nextui-org/button'
+import { Button } from "@heroui/button"
 import { PathForm } from './PathForm'
 import { DynamicMap, IBuildingGraph, INode, IVerticalConnection, NavigationSystem, Office } from '@/entities/map'
 

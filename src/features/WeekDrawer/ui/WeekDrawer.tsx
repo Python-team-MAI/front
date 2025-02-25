@@ -1,7 +1,7 @@
 'use client'
 
 import { getWeekRange } from '@/shared/lib/dates/getWeekRange'
-import { Drawer, DrawerBody, DrawerContent, DrawerHeader } from '@nextui-org/drawer'
+import { Drawer, DrawerBody, DrawerContent, DrawerHeader } from "@heroui/drawer"
 import moment from 'moment'
 import { useTranslations } from 'next-intl'
 import { useRouter } from '@/entities/i18n/routing'

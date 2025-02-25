@@ -1,7 +1,8 @@
 'use client'
 
 import { Locale } from '@/entities/i18n/routing'
-import { NextUIProvider } from '@nextui-org/react'
+import { HeroUIProvider } from '@heroui/react'
+import { ToastProvider } from '@heroui/toast'
 import { AbstractIntlMessages, NextIntlClientProvider } from 'next-intl'
 import { ThemeProvider } from 'next-themes'
 
@@ -16,9 +17,12 @@ export function Providers({
 }) {
     return (
         <NextIntlClientProvider timeZone="Europe/Moscow" locale={locale} messages={messages}>
-            <ThemeProvider attribute="class" defaultTheme="dark">
-                <NextUIProvider>{children}</NextUIProvider>
-            </ThemeProvider>
+            <HeroUIProvider>
+                <ThemeProvider defaultTheme="dark" attribute="class" disableTransitionOnChange>
+                    <ToastProvider />
+                    {children}
+                </ThemeProvider>
+            </HeroUIProvider>
         </NextIntlClientProvider>
     )
 }

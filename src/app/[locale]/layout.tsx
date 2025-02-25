@@ -4,10 +4,10 @@ import { getMessages } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { Locale, routing } from '@/entities/i18n/routing'
 import { Header } from '@/widgets/Header'
-import './globals.css'
 import { Providers } from './providers'
+import './globals.css'
 
-const roboto = Roboto({ subsets: ['cyrillic', 'latin'], weight: ['500', '700', '900'] })
+const roboto = Roboto({ subsets: ['cyrillic', 'latin'], weight: ['500', '700', '900'], display: 'swap' })
 
 export const metadata: Metadata = {
     title: 'MAI Students',
@@ -30,11 +30,11 @@ export default async function RootLayout({
     const messages = await getMessages()
 
     return (
-        <html lang={locale}>
-            <body className={`${roboto.className} antialiased dark`}>
+        <html lang={locale} suppressHydrationWarning>
+            <body className={`${roboto.className} antialiased`}>
                 <Providers locale={locale} messages={messages}>
                     <Header />
-                    <div className="px-[10vw] max-md:px-2">{children}</div>
+                    <main className="px-[10vw] max-md:px-2">{children}</main>
                 </Providers>
             </body>
         </html>

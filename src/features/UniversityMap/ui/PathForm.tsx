@@ -1,8 +1,8 @@
 'use client'
 import { FC, useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { Select, SelectItem } from '@nextui-org/select'
-import { Button } from '@nextui-org/button'
+import { Select, SelectItem } from "@heroui/select"
+import { Button } from "@heroui/button"
 import { INode } from '@/entities/map'
 
 interface Props {

@@ -1,7 +1,8 @@
 'use client'
 
 import { INSTITUTES } from '@/shared/constants/institutes'
-import { Button, Select, SelectItem } from '@nextui-org/react'
+import { Button } from '@heroui/button'
+import { Select, SelectItem } from '@heroui/select'
 import React, { FC, Fragment, ReactNode, useEffect, useState } from 'react'
 import { Group } from '../model/types/Group'
 import { useTranslations } from 'next-intl'
