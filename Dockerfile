@@ -4,27 +4,22 @@ WORKDIR /app
 
 RUN apk add --no-cache ca-certificates
 
-COPY package.json yarn.lock .npmrc* ./
+COPY package.json package-lock.json* .npmrc* ./
 
-RUN yarn config delete proxy
-
-RUN yarn install --frozen-lockfile --network-timeout 1000000
+RUN npm ci --no-audit --prefer-offline
 
 COPY ./tsconfig.json ./tsconfig.json
-
 COPY . .
 
-RUN yarn run build
+RUN npm run build
 
 FROM node:20-alpine AS production
 
 WORKDIR /app
 
-COPY package.json yarn.lock ./
+COPY package.json package-lock.json* ./
 
-RUN yarn config delete proxy
-
-RUN yarn install --production --frozen-lockfile --network-timeout 1000000
+RUN npm ci --production --no-audit --prefer-offline
 
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
@@ -32,4 +27,5 @@ COPY --from=builder /app/next.config.ts ./
 
 ENV NODE_ENV production
 EXPOSE 3000
-CMD ["yarn", "run", "start", "-H", "0.0.0.0", "-p", "3000"]
+
+CMD ["npm", "run", "start", "-H", "0.0.0.0", "-p", "3000"]
