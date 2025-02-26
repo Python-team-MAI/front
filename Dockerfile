@@ -6,6 +6,8 @@ RUN apk add --no-cache ca-certificates
 
 COPY package.json yarn.lock .npmrc* ./
 
+RUN yarn config delete proxy
+
 RUN yarn install --frozen-lockfile --network-timeout 1000000
 
 COPY ./tsconfig.json ./tsconfig.json
@@ -19,6 +21,8 @@ FROM node:20-alpine AS production
 WORKDIR /app
 
 COPY package.json yarn.lock ./
+
+RUN yarn config delete proxy
 
 RUN yarn install --production --frozen-lockfile --network-timeout 1000000
 
