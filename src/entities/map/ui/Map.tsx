@@ -16,11 +16,7 @@ interface Props {
 
 export const Map: FC<Props> = ({ mode, nodes, offices, path }) => {
     return (
-        <Canvas
-            camera={{ fov: 45, position: [0, 15, 0] }}
-            shadows
-            className="absolute max-h-screen min-h-[80vh] top-0 left-0"
-        >
+        <Canvas camera={{ fov: 45, position: [0, 15, 0] }} shadows className="absolute max-h-screen top-0 left-0">
             <OfficeDrawer mode={mode} offices={offices} />
             {path && <PathDrawer mode={mode} path={path} nodes={nodes} />}
             {mode === '2d' ? (

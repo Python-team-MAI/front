@@ -34,7 +34,7 @@ export default async function RootLayout({
             <body className={`${roboto.className} antialiased`}>
                 <Providers locale={locale} messages={messages}>
                     <Header />
-                    <main className="px-[10vw] max-md:px-2">{children}</main>
+                    <div className="px-[10vw] max-md:px-2">{children}</div>
                 </Providers>
             </body>
         </html>

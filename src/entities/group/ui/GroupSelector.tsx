@@ -12,6 +12,7 @@ interface GroupSelectorProps {
     GroupsWrapper?: FC<{ children: ReactNode }>
     FormWrapper?: FC<{ children: ReactNode }>
     Wrapper?: FC<{ children: ReactNode }>
+    CourseWrapper?: FC<{ children: ReactNode }>
     setValue?: (key: string, value: string) => void
 }
 
@@ -26,6 +27,7 @@ export const GroupSelector: FC<GroupSelectorProps> = ({
     groups,
     FormWrapper = Fragment,
     GroupsWrapper = Fragment,
+    CourseWrapper = ({ children }: { children: ReactNode }) => <div className="grid gap-2 grid-cols-3">{children}</div>,
     Wrapper = Fragment,
     setValue,
 }) => {
@@ -97,7 +99,7 @@ export const GroupSelector: FC<GroupSelectorProps> = ({
                         <SelectItem key={level}>{level}</SelectItem>
                     ))}
                 </Select>
-                <div className="grid gap-2 grid-cols-3">
+                <CourseWrapper>
                     {(!regInfo.institute || !regInfo.level) && (
                         <>
                             <Button isDisabled>1</Button>
@@ -114,7 +116,7 @@ export const GroupSelector: FC<GroupSelectorProps> = ({
                             {course}
                         </Button>
                     ))}
-                </div>
+                </CourseWrapper>
             </FormWrapper>
 
             <GroupsWrapper>

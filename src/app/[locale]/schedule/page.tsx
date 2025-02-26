@@ -1,16 +1,15 @@
 import React from 'react'
 import { Schedule } from '@/entities/schedule'
 import { getWeekRange } from '@/shared/lib/dates/getWeekRange'
-import * as crypto from 'crypto'
 import moment from 'moment'
 import { ScheduleClient } from './Schedule'
 import { WeekDrawer } from '@/features/WeekDrawer'
 import { GroupDrawer } from '@/features/GroupDrawer'
+import { $fetch } from '@/fetch'
 
 async function fetchSchedule(groupName: string): Promise<Schedule> {
-    const hash = crypto.createHash('md5').update(groupName).digest('hex')
     // Кэш на 12 недель = 7 257 600 секунд
-    const res = await fetch(`https://public.mai.ru/schedule/data/${hash}.json`, { next: { revalidate: 7257600 } })
+    const res = await $fetch(`/schedule/${groupName}`, { next: { revalidate: 7257600 } })
     return await res.json()
 }
 

@@ -2,6 +2,7 @@ import { getDayOfWeek } from '@/shared/lib/dates/getDayOfWeek'
 import { FC } from 'react'
 import { useRouter } from '@/entities/i18n/routing'
 import moment from 'moment'
+import { useTranslations } from 'next-intl'
 
 interface ScheduleMenuProps {
     time: string
@@ -14,6 +15,7 @@ interface ScheduleMenuProps {
 
 export const ScheduleMenu: FC<ScheduleMenuProps> = ({ time, currentDate, group, setDate, ref }) => {
     const router = useRouter()
+    const t = useTranslations()
 
     return (
         <div
@@ -26,7 +28,7 @@ export const ScheduleMenu: FC<ScheduleMenuProps> = ({ time, currentDate, group, 
                 currentDate.format('DD.MM.YYYY') === time ? 'border-[--tw-ring-color] border-large' : ''
             }`}
         >
-            <p className="text-xs">{getDayOfWeek(time)}</p>
+            <p className="text-xs">{t(getDayOfWeek(time))}</p>
             <p className="text-lg">{time.split('.')[0]}</p>
         </div>
     )

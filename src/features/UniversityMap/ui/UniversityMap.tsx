@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import testMap1 from '@/public/maps/test_map_1.json'
 import testMap2 from '@/public/maps/test_map_2.json'
 import vertConnections from '@/public/maps/all_vertical_connections.json'
-import { Button } from "@heroui/button"
+import { Button } from '@heroui/button'
 import { PathForm } from './PathForm'
 import { DynamicMap, IBuildingGraph, INode, IVerticalConnection, NavigationSystem, Office } from '@/entities/map'
 
@@ -36,7 +36,6 @@ export const UniversityMap = () => {
             const navSystem = new NavigationSystem(buildingGraph)
             const path = await navSystem.findPath(fromId, toId)
             setPath(path)
-            console.log(path)
             const instructions = navSystem.generateInstructions(path)
             setInstructions(instructions)
         } catch (error) {
@@ -46,7 +45,7 @@ export const UniversityMap = () => {
 
     return (
         <div className="grid grid-cols-[3fr_2fr] max-md:grid-cols-1">
-            <div className="relative">
+            <div className="relative h-[80vh] max-md:h-[70vh]">
                 {officesMapper[floor as 1 | 2] && (
                     <DynamicMap
                         offices={officesMapper[floor as 1 | 2]}

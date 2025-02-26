@@ -1,13 +1,12 @@
 'use client'
 
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/navbar"
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@heroui/navbar'
 import Image from 'next/image'
 import { Link, useRouter } from '@/navigation'
 import moment from 'moment'
 import { ThemeSwitcher } from '@/widgets/ThemeSwitcher'
 import { LanguageSwitcher } from '@/widgets/LanguageSwitcher'
-// import { UserAvatar } from '@/widgets/UserAvatar'
-// import { Button } from '@heroui/button'
+import { ProfileButton } from '@/widgets/ProfileButton'
 import { useTranslations } from 'next-intl'
 
 export const LongHeader = ({}) => {
@@ -40,15 +39,9 @@ export const LongHeader = ({}) => {
                 <NavbarItem>
                     <LanguageSwitcher />
                 </NavbarItem>
-                {/* <NavbarItem>
-                    {session ? (
-                        <UserAvatar session={session} />
-                    ) : (
-                        <Button size="sm" as={Link} color="primary" href="#" variant="flat">
-                            {t('sign in')}
-                        </Button>
-                    )}
-                </NavbarItem> */}
+                <NavbarItem>
+                    <ProfileButton />
+                </NavbarItem>
             </NavbarContent>
         </Navbar>
     )

@@ -23,7 +23,7 @@
         "baseUrl": ".",
         "paths": {
             "@/navigation": ["./src/entities/i18n/routing.ts"],
-            "@/fetch": ["./src/shared/lib/api/fetch.ts"],
+            "@/fetch": ["./src/shared/lib/api/index.ts"],
             "@/session": ["./src/shared/lib/sessions/SessionManager.tsx"],
             "@/public/*": ["./public/*"],
             "@/*": ["./src/*"]

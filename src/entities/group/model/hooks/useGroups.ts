@@ -20,7 +20,7 @@ export const useGroups = () => {
                 }
             } catch (e) {
                 setIsOk(false)
-                console.log(e)
+                console.error(e)
             } finally {
                 setIsLoading(false)
             }

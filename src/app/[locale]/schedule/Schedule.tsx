@@ -42,7 +42,6 @@ export const ScheduleClient = ({
                     const dateMoment = moment(date, 'DD.MM.YYYY')
                     const difference = time.diff(dateMoment, 'd')
                     if (lastDiff < 0 && difference >= 0) {
-                        console.log(time)
                         distanceIndexes = i + 1
                         monthIndexes = moment(times[distanceIndexes], 'DD.MM.YYYY').diff(
                             moment(times[0], 'DD.MM.YYYY'),
@@ -55,7 +54,6 @@ export const ScheduleClient = ({
                     }
                 }
             }
-            console.log(distanceIndexes, monthIndexes)
             scrollDateDiv.current?.scroll({
                 left: (elemWidth || 0) * (distanceIndexes + monthIndexes) * 1.16,
                 behavior: 'smooth',

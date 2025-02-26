@@ -33,10 +33,9 @@ export const AuthForm: FC<AuthFormProps> = ({ type }) => {
 
         try {
             setIsLoading(true)
-            const res = await $fetch(type === 'login' ? `/auth/login/` : `/auth/register/`, {
+            const res = await $fetch<false>(type === 'login' ? `/auth/login` : `/auth/register`, {
                 method: 'POST',
-                body: JSON.stringify({ email, password }),
-                credentials: 'include',
+                data: { email, password },
             })
 
             if (res.status === 200) {
@@ -46,17 +45,19 @@ export const AuthForm: FC<AuthFormProps> = ({ type }) => {
                     router.push('/register/info')
                 }
                 return
+            } else {
+                addToast({ color: 'danger', title: t('exist account') })
             }
         } catch (e) {
-            console.log(e)
+            console.error(e)
             addToast({ color: 'danger', title: t('wrong password or email') })
         } finally {
-            setIsLoading(true)
+            setIsLoading(false)
         }
     }
 
     return (
-        <form className="flex flex-col gap-2 w-full" action={onLogin}>
+        <form className="flex flex-col gap-2 w-full">
             <Input
                 required
                 className="w-full"
@@ -77,7 +78,7 @@ export const AuthForm: FC<AuthFormProps> = ({ type }) => {
                 id="password"
                 type="password"
             />
-            <Button isLoading={isLoading} color="primary" className="w-full" type="submit">
+            <Button isLoading={isLoading} onPress={onLogin} color="primary" className="w-full" type="submit">
                 {t('sign in')}
             </Button>
         </form>
