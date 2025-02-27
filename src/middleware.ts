@@ -35,7 +35,7 @@ export default async function middleWare(request: NextRequest) {
     }
 
     if (
-        // process.env.NODE_ENV === 'production' &&
+        process.env.NODE_ENV === 'production' &&
         !accessToken &&
         request.nextUrl.pathname !== `/${locale}/login` &&
         request.nextUrl.pathname !== `/${locale}/register`
@@ -47,7 +47,7 @@ export default async function middleWare(request: NextRequest) {
                     method: 'POST',
                     headers: { Authorization: `Bearer ${refreshToken}` },
                 })
-                return NextResponse.redirect(new URL(`/${locale || 'en'}`, request.url))
+                // return NextResponse.redirect(new URL(`/${locale || 'en'}`, request.url))
             } catch (e) {
                 console.log(e)
                 return NextResponse.redirect(new URL(`/${locale || 'en'}/login`, request.url))

@@ -14,7 +14,7 @@ import { redirect } from '@/navigation'
 const Profile = async ({ params }: { params: Promise<{ locale: string }> }) => {
     const cookieStore = await cookies()
     const accessToken = cookieStore.get(ACCESS_TOKEN)
-    const res = await $fetch('/auth/users/me', { headers: { Authorization: `Bearer ${accessToken?.value}` } })
+    const res = await $fetch('/auth/me', { headers: { Authorization: `Bearer ${accessToken?.value}` } })
     const user: User = await res.json()
     const t = await getTranslations()
     const { locale } = await params

@@ -9,8 +9,7 @@
         "lint": "next lint",
         "add-ui": "nextui add",
         "test": "jest",
-        "test:coverage": "jest --coverage",
-        "prepare": "husky install"
+        "test:coverage": "jest --coverage"
     },
     "dependencies": {
         "@heroui/alert": "2.2.13",

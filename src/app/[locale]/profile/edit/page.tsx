@@ -12,7 +12,7 @@ const EditProfile = async () => {
     const cookieStore = await cookies()
     const accessToken = cookieStore.get(ACCESS_TOKEN)
 
-    const resUser = await $fetch('/auth/users/me', { headers: { Authorization: `Bearer ${accessToken?.value}` } })
+    const resUser = await $fetch('/auth/me', { headers: { Authorization: `Bearer ${accessToken?.value}` } })
     const user: User = await resUser.json()
 
     return <ClientProfileEdit accessToken={accessToken?.value || ''} groups={groups} user={user} />
