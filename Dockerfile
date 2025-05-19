@@ -6,7 +6,7 @@ RUN apk add --no-cache ca-certificates
 
 COPY package.json package-lock.json* ./
 
-RUN npm ci --no-audit --prefer-offline
+RUN npm ci --no-audit --prefer-offline --force
 
 COPY ./tsconfig.json ./tsconfig.json
 COPY . .
@@ -19,7 +19,7 @@ WORKDIR /app
 
 COPY package.json package-lock.json* ./
 
-RUN npm ci --no-audit --prefer-offline --omit=dev
+RUN npm ci --no-audit --prefer-offline --omit=dev --force
 
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
