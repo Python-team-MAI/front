@@ -8,6 +8,7 @@ import { useState } from "react";
 
 const ChatPage = () => {
 	const [message, setMessage] = useState<Message>({ message: "", sid: "" });
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [userId, setUserId] = useState("");
 	const [chatId, setChatId] = useState("");
