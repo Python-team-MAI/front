@@ -1,114 +1,88 @@
 import { Locale, redirect } from '@/entities/i18n/routing'
+import { CardProps, MainCard, SecondaryCard } from '@/entities/main'
+import { TgBanner } from '@/features/TgBanner'
 import { Button } from "@heroui/button"
-import { Card, CardFooter, CardHeader } from "@heroui/card"
+import { Card, CardHeader } from "@heroui/card"
 import { getTranslations } from 'next-intl/server'
 import Image from 'next/image'
+
+const mainCards: CardProps[] = [
+    {
+        src: '/icons/safe.svg',
+        alt: 'safe',
+        text: 'payment',
+        href: ""
+    },
+    {
+        src: '/icons/laptop.svg',
+        alt: 'laptop',
+        text: 'lms',
+        href: ""
+    },
+    {
+        src: '/icons/notepad.svg',
+        alt: 'notepad',
+        text: 'admission',
+        href: ""
+    },
+    {
+        src: '/icons/student.svg',
+        alt: 'student',
+        text: 'account',
+        href: ""
+    }
+]
+
+const secondaryCards: CardProps[] = [
+    {
+        src: '/icons/teacher.svg', 
+        alt: 'teacher',
+        text: 'teachers',
+        href: ""
+    },
+    {
+        src: '/icons/burger_king.svg',
+        alt: 'burger_king',
+        text: 'food',
+        href: ""
+    },
+    {
+        src: '/icons/sport.svg',
+        alt: 'sport',
+        text: 'sport',
+        href: ""
+    }, 
+    {
+        src: '/icons/news.svg',
+        alt: 'news',
+        text: 'news',
+        href: ""
+    }
+]
+
+// const bigCards: CardProps[] = [];
 
 export default async function Home({ params }: { params: Promise<{ locale: Locale }> }) {
     const { locale } = await params
     const t = await getTranslations()
+    const randomNumber = Math.random()
 
     return (
         <main className="p-2">
-            <section className="grid max-md:grid-cols-2 grid-cols-4 gap-2">
-                <Card className="flex flex-col items-center cursor-pointer">
-                    <Image
-                        className="max-md:w-24"
-                        unoptimized
-                        alt="safe"
-                        src={'/icons/safe.svg'}
-                        width={150}
-                        height={150}
-                    />
-                    <CardFooter className="flex justify-center">{t('payment')}</CardFooter>
-                </Card>
-                <Card className="flex flex-col items-center cursor-pointer">
-                    <Image
-                        className="max-md:w-24"
-                        unoptimized
-                        alt="safe"
-                        src={'/icons/laptop.svg'}
-                        width={150}
-                        height={150}
-                    />
-                    <CardFooter className="flex justify-center">{t('lms')}</CardFooter>
-                </Card>
-                <Card className="flex flex-col items-center cursor-pointer">
-                    <Image
-                        className="max-md:w-24"
-                        unoptimized
-                        alt="safe"
-                        src={'/icons/student.svg'}
-                        width={150}
-                        height={150}
-                    />
-                    <CardFooter className="flex justify-center">{t('account')}</CardFooter>
-                </Card>
-                <Card className="flex flex-col items-center cursor-pointer">
-                    <Image
-                        className="max-md:w-24"
-                        unoptimized
-                        alt="safe"
-                        src={'/icons/notepad.svg'}
-                        width={150}
-                        height={150}
-                    />
-                    <CardFooter className="flex justify-center">{t('admission')}</CardFooter>
-                </Card>
+            <section className={`grid max-md:grid-cols-2 ${randomNumber > 0.5 ? 'grid-cols-5' : 'grid-cols-4'} gap-2`}>
+                {
+                    mainCards.map((card) => (
+                        <MainCard href={card.href} src={card.src} alt={card.alt} text={t(card.text)} key={card.src}/> 
+                    ))
+                }
+                {randomNumber > 0.5 && <TgBanner/>}
             </section>
             <section className="flex justify-center gap-2 m-4">
-                <div className="cursor-pointer">
-                    <Card className="flex flex-col items-center cursor-pointer">
-                        <Image
-                            className="max-md:w-16"
-                            unoptimized
-                            alt="safe"
-                            src={'/icons/teacher.svg'}
-                            width={100}
-                            height={100}
-                        />
-                    </Card>
-                    <p className="text-center m-1 text-sm">{t('teachers')}</p>
-                </div>
-                <div className="cursor-pointer">
-                    <Card className="flex flex-col items-center cursor-pointer">
-                        <Image
-                            className="max-md:w-16"
-                            unoptimized
-                            alt="safe"
-                            src={'/icons/burger_king.svg'}
-                            width={100}
-                            height={100}
-                        />
-                    </Card>
-                    <p className="text-center m-1 text-sm">{t('food')}</p>
-                </div>
-                <div className="cursor-pointer">
-                    <Card className="flex flex-col items-center cursor-pointer">
-                        <Image
-                            className="max-md:w-16"
-                            unoptimized
-                            alt="safe"
-                            src={'/icons/sport.svg'}
-                            width={100}
-                            height={100}
-                        />
-                    </Card>
-                    <p className="text-center m-1 text-sm">{t('sport')}</p>
-                </div>
-                <div className="cursor-pointer">
-                    <Card className="flex flex-col items-center">
-                        <Image
-                            className="max-md:w-16"
-                            unoptimized
-                            alt="safe"
-                            src={'/icons/news.svg'}
-                            width={100}
-                            height={100}
-                        />
-                    </Card>
-                    <p className="text-center m-1 text-sm">{t('news')}</p>
-                </div>
+                {
+                    secondaryCards.map((card) => (
+                        <SecondaryCard href={card.href} src={card.src} alt={card.alt} text={t(card.text)} key={card.src}/> 
+                    ))
+                }
             </section>
             <section className="mt-2 flex flex-col gap-2 md:m-7">
                 <Card>

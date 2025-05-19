@@ -1,86 +1,139 @@
-'use client'
+"use client";
 
-import { Button } from '@heroui/button'
-import { Input } from '@heroui/input'
-import { useTranslations } from 'next-intl'
-import { useRouter } from '@/navigation'
-import { FC, useState } from 'react'
-import { addToast } from '@heroui/toast'
-import { isEmail } from '@/shared/validation/isEmail'
-import { $fetch } from '@/fetch'
+import { Button } from "@heroui/button";
+import { Input } from "@heroui/input";
+import { useTranslations } from "next-intl";
+import { useRouter } from "@/navigation";
+import { FC, useState } from "react";
+import { addToast } from "@heroui/toast";
+import { isEmail } from "@/shared/validation/isEmail";
+import { $fetch } from "@/fetch";
 
 interface AuthFormProps {
-    type: 'login' | 'register'
+	type: "login" | "register";
 }
+
+const getPasswordLevel = (password: string): 0 | 1 | 2 | 3 => {
+	if (password.length === 0) return 0;
+
+	const hasLower = /[a-z]/.test(password);
+	const hasUpper = /[A-Z]/.test(password);
+	const hasDigit = /\d/.test(password);
+	const hasSpecial = /[^A-Za-z0-9]/.test(password);
+
+	if (password.length >= 10 && hasLower && hasUpper && hasDigit && hasSpecial) return 3;
+	if (password.length >= 8 && (hasLower || hasUpper) && hasDigit) return 2;
+	if (password.length >= 6) return 1;
+
+	return 0;
+};
 
 export const AuthForm: FC<AuthFormProps> = ({ type }) => {
-    const t = useTranslations()
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [isLoading, setIsLoading] = useState(false)
-    const router = useRouter()
+	const t = useTranslations();
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [passwordLevel, setPasswordLevel] = useState<0 | 1 | 2 | 3>(0);
+	const [isLoading, setIsLoading] = useState(false);
+	const router = useRouter();
 
-    const onLogin = async () => {
-        if (!email || !password) {
-            addToast({ title: t('no email or password') })
-            return
-        }
+	const onLogin = async () => {
+		if (!email || !password) {
+			addToast({ title: t("no email or password") });
+			return;
+		}
 
-        if (!isEmail(email)) {
-            addToast({ title: t('wrong email'), description: t('type right email') })
-            return
-        }
+		if (!isEmail(email)) {
+			addToast({ title: t("wrong email"), description: t("type right email") });
+			return;
+		}
 
-        try {
-            setIsLoading(true)
-            const res = await $fetch<false>(type === 'login' ? `/auth/login` : `/auth/register`, {
-                method: 'POST',
-                data: { email, password },
-            })
+		try {
+			setIsLoading(true);
+			const res = await $fetch<false>(type === "login" ? `/auth/login` : `/auth/register`, {
+				method: "POST",
+				data: { email, password },
+			});
 
-            if (res.status === 200) {
-                if (type === 'login') {
-                    router.push('/')
-                } else {
-                    router.push('/register/info')
-                }
-                return
-            } else {
-                addToast({ color: 'danger', title: t('exist account') })
-            }
-        } catch (e) {
-            console.error(e)
-            addToast({ color: 'danger', title: t('wrong password or email') })
-        } finally {
-            setIsLoading(false)
-        }
-    }
+			if (res.status === 200) {
+				if (type === "login") {
+					router.push("/");
+				} else {
+					router.push("/register/info");
+				}
+				return;
+			} else {
+				addToast({ color: "danger", title: t("exist account") });
+			}
+		} catch (e) {
+			console.error(e);
+			addToast({ color: "danger", title: t("wrong password or email") });
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
-    return (
-        <form className="flex flex-col gap-2 w-full">
-            <Input
-                required
-                className="w-full"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                label={t('email')}
-                name="email"
-                id="email"
-                type="email"
-            />
-            <Input
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full"
-                label={t('password')}
-                name="password"
-                id="password"
-                type="password"
-            />
-            <Button isLoading={isLoading} onPress={onLogin} color="primary" className="w-full" type="submit">
-                {t('sign in')}
-            </Button>
-        </form>
-    )
-}
+	return (
+		<form className="flex flex-col gap-2 w-full">
+			<Input
+				required
+				className="w-full"
+				value={email}
+				onChange={(e) => setEmail(e.target.value)}
+				label={t("email")}
+				name="email"
+				id="email"
+				type="email"
+			/>
+			<Input
+				value={password}
+				onChange={(e) => {
+					setPassword(e.target.value);
+					setPasswordLevel(getPasswordLevel(e.target.value));
+				}}
+				required
+				className="w-full"
+				label={t("password")}
+				name="password"
+				id="password"
+				type="password"
+			/>
+
+			<div className="w-full mt-1 space-y-1">
+				<div className="flex gap-1 h-2">
+					<div
+						className={`w-1/3 rounded-full transition-all ${
+							passwordLevel >= 1 ? "bg-red-500" : "bg-gray-200"
+						}`}
+					/>
+					<div
+						className={`w-1/3 rounded-full transition-all ${
+							passwordLevel >= 2 ? "bg-yellow-500" : "bg-gray-200"
+						}`}
+					/>
+					<div
+						className={`w-1/3 rounded-full transition-all ${
+							passwordLevel >= 3 ? "bg-green-500" : "bg-gray-200"
+						}`}
+					/>
+				</div>
+				<p className="text-xs text-gray-500">
+					{passwordLevel === 0 && t("enter password")}
+					{passwordLevel === 1 && t("weak")}
+					{passwordLevel === 2 && t("medium")}
+					{passwordLevel === 3 && t("strong")}
+				</p>
+			</div>
+
+			<Button
+				isLoading={isLoading}
+				onPress={onLogin}
+				color="primary"
+				className="w-full mt-2"
+				type="submit"
+				isDisabled={passwordLevel < 2}
+			>
+				{t(type === "login" ? "sign in" : "sign up")}
+			</Button>
+		</form>
+	);
+};
