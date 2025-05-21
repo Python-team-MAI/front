@@ -8,7 +8,6 @@ export default async function middleWare(request: NextRequest) {
 	const accessToken = request.cookies.get(ACCESS_TOKEN);
 	const pathname = request.nextUrl.pathname;
 	let locale;
-	console.log("token", accessToken);
 
 	switch (pathname.slice(0, 4)) {
 		case "/ru":
@@ -35,7 +34,7 @@ export default async function middleWare(request: NextRequest) {
 	}
 
 	if (
-		// process.env.NODE_ENV === 'production' &&
+		// process.env.NODE_ENV === "production" &&
 		!accessToken &&
 		request.nextUrl.pathname !== `/${locale}/login` &&
 		request.nextUrl.pathname !== `/${locale}/register`

@@ -8,6 +8,8 @@ import { FC, useState } from "react";
 import { addToast } from "@heroui/toast";
 import { isEmail } from "@/shared/validation/isEmail";
 import { $fetch } from "@/fetch";
+import { CookieManager } from "@/shared/lib/cookie/cookie";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/shared/constants/tokens";
 
 interface AuthFormProps {
 	type: "login" | "register";
@@ -54,6 +56,9 @@ export const AuthForm: FC<AuthFormProps> = ({ type }) => {
 				data: { email, password },
 			});
 
+			CookieManager.set(ACCESS_TOKEN, res.data.access_token);
+			CookieManager.set(REFRESH_TOKEN, res.data.refresh_token);
+
 			if (res.status === 200) {
 				if (type === "login") {
 					router.push("/");
@@ -98,31 +103,33 @@ export const AuthForm: FC<AuthFormProps> = ({ type }) => {
 				type="password"
 			/>
 
-			<div className="w-full mt-1 space-y-1">
-				<div className="flex gap-1 h-2">
-					<div
-						className={`w-1/3 rounded-full transition-all ${
-							passwordLevel >= 1 ? "bg-red-500" : "bg-gray-200"
-						}`}
-					/>
-					<div
-						className={`w-1/3 rounded-full transition-all ${
-							passwordLevel >= 2 ? "bg-yellow-500" : "bg-gray-200"
-						}`}
-					/>
-					<div
-						className={`w-1/3 rounded-full transition-all ${
-							passwordLevel >= 3 ? "bg-green-500" : "bg-gray-200"
-						}`}
-					/>
+			{type === "register" && (
+				<div className="w-full mt-1 space-y-1">
+					<div className="flex gap-1 h-2">
+						<div
+							className={`w-1/3 rounded-full transition-all ${
+								passwordLevel >= 1 ? "bg-red-500" : "bg-gray-200"
+							}`}
+						/>
+						<div
+							className={`w-1/3 rounded-full transition-all ${
+								passwordLevel >= 2 ? "bg-yellow-500" : "bg-gray-200"
+							}`}
+						/>
+						<div
+							className={`w-1/3 rounded-full transition-all ${
+								passwordLevel >= 3 ? "bg-green-500" : "bg-gray-200"
+							}`}
+						/>
+					</div>
+					<p className="text-xs text-gray-500">
+						{passwordLevel === 0 && t("enter password")}
+						{passwordLevel === 1 && t("weak")}
+						{passwordLevel === 2 && t("medium")}
+						{passwordLevel === 3 && t("strong")}
+					</p>
 				</div>
-				<p className="text-xs text-gray-500">
-					{passwordLevel === 0 && t("enter password")}
-					{passwordLevel === 1 && t("weak")}
-					{passwordLevel === 2 && t("medium")}
-					{passwordLevel === 3 && t("strong")}
-				</p>
-			</div>
+			)}
 
 			<Button
 				isLoading={isLoading}
@@ -130,7 +137,7 @@ export const AuthForm: FC<AuthFormProps> = ({ type }) => {
 				color="primary"
 				className="w-full mt-2"
 				type="submit"
-				isDisabled={passwordLevel < 2}
+				isDisabled={type === "register" && passwordLevel < 2}
 			>
 				{t(type === "login" ? "sign in" : "sign up")}
 			</Button>
