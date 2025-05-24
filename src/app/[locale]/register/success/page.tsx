@@ -2,7 +2,9 @@ import { Locale, redirect } from "@/navigation";
 import { Button } from "@heroui/button";
 import React from "react";
 
-const EmailPage = ({ params }: { params: { locale: Locale } }) => {
+const EmailPage = async ({ params }: { params: Promise<{ locale: Locale }> }) => {
+	const { locale } = await params;
+
 	return (
 		<div className="flex justify-center items-center flex-1 min-h-[80vh]">
 			<div className="px-[10vw] max-md:px-2">
@@ -17,7 +19,7 @@ const EmailPage = ({ params }: { params: { locale: Locale } }) => {
 						color="primary"
 						onPress={async () => {
 							"use server";
-							redirect({ href: "/login", locale: params.locale });
+							redirect({ href: "/login", locale: locale || "ru" });
 						}}
 					>
 						Авторизация
