@@ -13,9 +13,9 @@ class SocketService {
 				.find((row) => row.startsWith(`${ACCESS_TOKEN}=`))
 				?.split("=")[1];
 
-			const socketIo = io("http://172.22.105.67:8000", {
+			const socketIo = io(process.env.NEXT_PUBLIC_SOCKET_URL, {
 				auth: {
-					access_token,
+					access_token: `Bearer ${access_token}`,
 					chat_id: chatId,
 				},
 				transports: ["websocket"],

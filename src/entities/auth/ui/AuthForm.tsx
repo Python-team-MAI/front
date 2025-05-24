@@ -56,14 +56,13 @@ export const AuthForm: FC<AuthFormProps> = ({ type }) => {
 				data: { email, password },
 			});
 
-			CookieManager.set(ACCESS_TOKEN, res.data.access_token);
-			CookieManager.set(REFRESH_TOKEN, res.data.refresh_token);
-
 			if (res.status === 200) {
 				if (type === "login") {
+					CookieManager.set(ACCESS_TOKEN, res.data.access_token);
+					CookieManager.set(REFRESH_TOKEN, res.data.refresh_token);
 					router.push("/");
 				} else {
-					router.push("/register/info");
+					router.push("/register/email");
 				}
 				return;
 			} else {

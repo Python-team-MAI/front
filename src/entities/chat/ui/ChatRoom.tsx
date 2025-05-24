@@ -1,4 +1,3 @@
-// components/ChatRoom.tsx
 import React, { useEffect, useState } from "react";
 import { ChatRead, MessageRead } from "../model/types/message";
 import { chatApi } from "../api/chatApi";
@@ -8,11 +7,10 @@ import { MessageInput } from "./MessageInput/MessageInput";
 import { Button } from "@heroui/button";
 
 interface ChatRoomProps {
-	chatId: number;
-	onDisconnect: () => void;
+	chatId: number | undefined;
 }
 
-export const ChatRoom: React.FC<ChatRoomProps> = ({ chatId, onDisconnect }) => {
+export const ChatRoom: React.FC<ChatRoomProps> = ({ chatId }) => {
 	const [messages, setMessages] = useState<MessageRead[]>([]);
 	const [chat, setChat] = useState<ChatRead | null>(null);
 	const [loading, setLoading] = useState(true);
@@ -21,6 +19,8 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({ chatId, onDisconnect }) => {
 
 	useEffect(() => {
 		const initChat = async () => {
+			if (!chatId) return;
+
 			try {
 				setLoading(true);
 
@@ -66,6 +66,14 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({ chatId, onDisconnect }) => {
 		};
 	}, [chatId]);
 
+	if (!chatId) {
+		return (
+			<div className="p-6 rounded-lg shadow-md">
+				<div className="px-4 py-3 rounded mb-4">Select a chat to join</div>
+			</div>
+		);
+	}
+
 	const handleSendMessage = (text: string, isAnonymous: boolean) => {
 		if (!text.trim()) return;
 
@@ -80,7 +88,6 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({ chatId, onDisconnect }) => {
 
 	const handleDisconnect = () => {
 		socketService.disconnect();
-		onDisconnect();
 	};
 
 	if (loading) {
@@ -95,12 +102,6 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({ chatId, onDisconnect }) => {
 		return (
 			<div className="p-6 rounded-lg shadow-md">
 				<div className="px-4 py-3 rounded mb-4">{error}</div>
-				<button
-					onClick={onDisconnect}
-					className="py-2 px-4 rounded-md shadow-sm text-sm font-medium"
-				>
-					Back
-				</button>
 			</div>
 		);
 	}

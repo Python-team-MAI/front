@@ -1,10 +1,4 @@
 export class CookieManager {
-	/**
-	 * Устанавливает cookie
-	 * @param name - Имя cookie
-	 * @param value - Значение cookie
-	 * @param options - Дополнительные параметры (expires, path, domain, secure, sameSite)
-	 */
 	static set(
 		name: string,
 		value: string,
@@ -49,11 +43,6 @@ export class CookieManager {
 		document.cookie = cookie;
 	}
 
-	/**
-	 * Получает значение cookie по имени
-	 * @param name - Имя cookie
-	 * @returns Значение cookie или null, если cookie не найдена
-	 */
 	static get(name: string): string | null {
 		const cookies = document.cookie.split(";");
 		for (const cookie of cookies) {
@@ -65,12 +54,6 @@ export class CookieManager {
 		return null;
 	}
 
-	/**
-	 * Удаляет cookie по имени
-	 * @param name - Имя cookie
-	 * @param path - Путь cookie (должен совпадать с путем при установке)
-	 * @param domain - Домен cookie (должен совпадать с доменом при установке)
-	 */
 	static remove(name: string, path?: string, domain?: string): void {
 		this.set(name, "", {
 			expires: new Date(0),
@@ -79,19 +62,10 @@ export class CookieManager {
 		});
 	}
 
-	/**
-	 * Проверяет существование cookie
-	 * @param name - Имя cookie
-	 * @returns true, если cookie существует, иначе false
-	 */
 	static has(name: string): boolean {
 		return this.get(name) !== null;
 	}
 
-	/**
-	 * Возвращает все cookies в виде объекта
-	 * @returns Объект с парами имя-значение всех cookies
-	 */
 	static getAll(): Record<string, string> {
 		const cookies: Record<string, string> = {};
 		document.cookie.split(";").forEach((cookie) => {

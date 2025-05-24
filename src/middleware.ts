@@ -61,7 +61,7 @@ export default async function middleWare(request: NextRequest) {
 		(request.nextUrl.pathname === `/${locale}/login` ||
 			request.nextUrl.pathname === `/${locale}/register`)
 	) {
-		return NextResponse.redirect(new URL(`/${locale || "en"}`, request.url));
+		return NextResponse.redirect(new URL(`/${locale || "ru"}`, request.url));
 	}
 
 	return createMiddleware(routing)(request);
