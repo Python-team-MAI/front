@@ -1,8 +1,8 @@
 // components/MessageInput.tsx
-import { Button } from "@heroui/button";
 import { Checkbox } from "@heroui/checkbox";
-import { Input } from "@heroui/input";
 import React, { useState } from "react";
+import { TextInput } from "./TextInput";
+import { MdInput } from "./MdInput";
 
 interface MessageInputProps {
 	onSendMessage: (text: string, isAnonymous: boolean) => void;
@@ -15,6 +15,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => 
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
+		console.log(message);
 		if (message.trim()) {
 			onSendMessage(message, isAnonymous);
 			setMessage("");
@@ -24,11 +25,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => 
 	return (
 		<form onSubmit={handleSubmit} className="flex flex-col space-y-2">
 			<div className="flex items-center gap-3">
-				<Checkbox
-					checked={isAnonymous}
-					onChange={(e) => setIsAnonymous(e.target.checked)}
-					className="mr-2"
-				>
+				<Checkbox checked={isAnonymous} onChange={(e) => setIsAnonymous(e.target.checked)} className="mr-2">
 					Send anonymously
 				</Checkbox>
 				<Checkbox checked={isMd} onChange={(e) => setIsMd(e.target.checked)} className="mr-2">
@@ -37,15 +34,11 @@ export const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => 
 			</div>
 
 			<div className="flex items-center space-x-2">
-				<Input
-					type="text"
-					value={message}
-					onChange={(e) => setMessage(e.target.value)}
-					placeholder="Type your message..."
-				/>
-				<Button type="submit" disabled={!message.trim()} color="primary">
-					Send
-				</Button>
+				{!isMd ? (
+					<TextInput message={message} setMessage={setMessage} />
+				) : (
+					<MdInput message={message} setMessage={setMessage} />
+				)}
 			</div>
 		</form>
 	);

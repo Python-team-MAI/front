@@ -15,7 +15,7 @@ class SocketService {
 
 			const socketIo = io(process.env.NEXT_PUBLIC_SOCKET_URL, {
 				auth: {
-					access_token: `Bearer ${access_token}`,
+					access_token,
 					chat_id: chatId,
 				},
 				transports: ["websocket"],

@@ -28,24 +28,26 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({ chatId }) => {
 				setChat(chatData);
 
 				const messagesData = await chatApi.getChatMessages(chatId);
-				setMessages(messagesData);
+				setMessages(messagesData.map((message) => ({ message })));
 
 				await socketService.connect(chatId);
 				setConnected(true);
 				setLoading(false);
 
 				socketService.onChatMessage((data) => {
-					const newMessage = data;
+					const { message } = data;
 					setMessages((prev) => [
 						...prev,
 						{
-							id: newMessage.id,
-							text: newMessage.text,
-							user_id: newMessage.user_id,
-							chat_id: newMessage.chat_id,
-							created_at: new Date().toISOString(),
-							updated_at: new Date().toISOString(),
-							is_anonymous: newMessage.is_anonymous,
+							message: {
+								id: message.id,
+								text: message.text,
+								user_id: message.user_id,
+								chat_id: message.chat_id,
+								created_at: new Date().toISOString(),
+								updated_at: new Date().toISOString(),
+								is_anonymous: message.is_anonymous,
+							},
 						},
 					]);
 				});
@@ -114,9 +116,7 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({ chatId }) => {
 					{chat && <p className="text-sm">Type: {chat.type}</p>}
 				</div>
 				<div className="flex items-center space-x-2">
-					<div
-						className={`h-3 w-3 rounded-full ${connected ? "bg-green-500" : "bg-red-500"}`}
-					></div>
+					<div className={`h-3 w-3 rounded-full ${connected ? "bg-green-500" : "bg-red-500"}`}></div>
 					<span className="text-sm text-gray-600">{connected ? "Connected" : "Disconnected"}</span>
 					<Button onPress={handleDisconnect} className="ml-4" color="danger">
 						Disconnect

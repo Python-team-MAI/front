@@ -26,7 +26,7 @@ export const chatApi = {
 		await $fetch<false>(`/chats/${chatId}`, { method: "DELETE" });
 	},
 
-	getChatMessages: async (chatId: number, page: number = 1): Promise<MessageRead[]> => {
+	getChatMessages: async (chatId: number, page: number = 1): Promise<MessageRead["message"][]> => {
 		const response = await $fetch<false>(`/chats/${chatId}/messages?page=${page}`);
 		return response.data;
 	},

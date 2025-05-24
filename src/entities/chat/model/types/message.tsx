@@ -27,15 +27,17 @@ export interface ChatFilter extends Partial<Chat> {
 
 export interface MessageRead {
 	sid?: number;
-	id: number;
-	text: string;
-	user_id: number;
-	chat_id: number;
-	first_name?: string;
-	last_name?: string;
-	created_at: string;
-	updated_at: string;
-	is_anonymous: boolean;
+	message: {
+		id: number;
+		text: string;
+		user_id: number;
+		chat_id: number;
+		first_name?: string;
+		last_name?: string;
+		created_at: string;
+		updated_at: string;
+		is_anonymous: boolean;
+	};
 }
 
 export interface MessageCreate {

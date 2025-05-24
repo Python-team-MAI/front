@@ -1,21 +1,21 @@
 services:
-    nextjs:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        image: mai-students-frontend
-        container_name: nextjs_app
-        env_file:
-            - .env
-        ports:
-            - '3000:3000'
-        volumes:
-            - ./public:/app/public:ro
-            - ./messages:/app/messages:ro
-        networks:
-            - frontend
-        restart: unless-stopped
+  nextjs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: mai-students-frontend
+    container_name: nextjs_app
+    env_file:
+      - .env
+    ports:
+      - "3000-3002:3000"
+    volumes:
+      - ./public:/app/public:ro
+      - ./messages:/app/messages:ro
+    networks:
+      - frontend
+    restart: unless-stopped
 
 networks:
-    frontend:
-        driver: bridge
+  frontend:
+    driver: bridge
