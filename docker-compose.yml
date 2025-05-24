@@ -4,7 +4,6 @@ services:
       context: .
       dockerfile: Dockerfile
     image: mai-students-frontend
-    container_name: nextjs_app
     env_file:
       - .env
     ports:
