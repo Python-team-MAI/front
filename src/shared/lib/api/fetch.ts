@@ -25,12 +25,8 @@ export const $fetch = <isServer extends boolean = true>(
 	init?: isServer extends true ? RequestInit : AxiosRequestConfig
 ): isServer extends true ? Promise<Response> : Promise<AxiosResponse> => {
 	if (isRequestInit(init)) {
-		return serverFetch(url, init) as isServer extends true
-			? Promise<Response>
-			: Promise<AxiosResponse>;
+		return serverFetch(url, init) as isServer extends true ? Promise<Response> : Promise<AxiosResponse>;
 	} else {
-		return clientFetch(url, init) as isServer extends true
-			? Promise<Response>
-			: Promise<AxiosResponse>;
+		return clientFetch(url, init) as isServer extends true ? Promise<Response> : Promise<AxiosResponse>;
 	}
 };
