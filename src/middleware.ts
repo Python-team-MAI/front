@@ -1,70 +1,73 @@
-import createMiddleware from "next-intl/middleware";
-import { routing } from "./entities/i18n/routing";
 import { NextRequest, NextResponse } from "next/server";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "./shared/constants/tokens";
 import { $fetch } from "@/fetch";
+import { checkLocale } from "./shared/lib/utils/middleware/getLocale";
 
-export default async function middleWare(request: NextRequest) {
-	const accessToken = request.cookies.get(ACCESS_TOKEN);
-	const pathname = request.nextUrl.pathname;
-	let locale;
+const notAuthRoutes = ["/login", "/register", "/register/email", "/register/success"];
 
-	switch (pathname.slice(0, 4)) {
-		case "/ru":
-			locale = "ru";
-			break;
-		case "/en":
-			locale = "en";
-			break;
-		case "/ch":
-			locale = "ch";
-			break;
-		case "/ru/":
-			locale = "ru";
-			break;
-		case "/en/":
-			locale = "en";
-			break;
-		case "/ch/":
-			locale = "ch";
-			break;
-		default:
-			locale = "ru";
-			break;
+const getNotAuthRoutes = (locale: string) => notAuthRoutes.map((route) => `/${locale}${route}`);
+
+export async function middleware(request: NextRequest) {
+	const accessToken = request.cookies.get(ACCESS_TOKEN)?.value;
+	const refreshToken = request.cookies.get(REFRESH_TOKEN)?.value;
+
+	const { pathname } = request.nextUrl;
+	const locale = checkLocale(pathname);
+
+	if (getNotAuthRoutes(locale).includes(pathname)) {
+		return NextResponse.next();
 	}
+	console.log("middleware");
 
-	if (
-		// process.env.NODE_ENV === "production" &&
-		!accessToken &&
-		request.nextUrl.pathname !== `/${locale}/login` &&
-		request.nextUrl.pathname !== `/${locale}/register`
-	) {
-		const refreshToken = request.cookies.get(REFRESH_TOKEN);
+	if (!accessToken) {
 		if (refreshToken) {
 			try {
-				await $fetch("/auth/refresh", {
+				const response = await $fetch(`/auth/refresh`, {
 					method: "POST",
-					headers: { Authorization: `Bearer ${refreshToken}` },
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ refreshToken }),
 				});
-				// return NextResponse.redirect(new URL(`/${locale || 'en'}`, request.url))
-			} catch (e) {
-				console.log(e);
-				return NextResponse.redirect(new URL(`/${locale || "en"}/login`, request.url));
+
+				if (response.ok) {
+					const data = await response.json();
+
+					const res = NextResponse.redirect(request.url);
+
+					const accessTokenMinutes = Number(process.env.ACCESS_TOKEN_EXPIRES) || 60;
+					const refreshTokenDays = Number(process.env.REFRESH_TOKEN_EXPIRES) || 1;
+
+					res.cookies.set(ACCESS_TOKEN, data.access_token, {
+						httpOnly: true,
+						secure: process.env.NODE_ENV === "production",
+						sameSite: "strict",
+						maxAge: accessTokenMinutes * 60,
+						path: "/",
+					});
+
+					res.cookies.set(REFRESH_TOKEN, data.refresh_token, {
+						httpOnly: true,
+						secure: process.env.NODE_ENV === "production",
+						sameSite: "strict",
+						maxAge: refreshTokenDays * 60,
+						path: "/",
+					});
+
+					return res;
+				}
+			} catch (error) {
+				console.error("Ошибка при обновлении токена:", error);
 			}
-		} else {
-			return NextResponse.redirect(new URL(`/${locale || "en"}/login`, request.url));
 		}
+		console.log("!refreshToken");
+		const url = request.nextUrl.clone();
+		url.pathname = `/${locale}/login`;
+
+		return NextResponse.redirect(url);
 	}
 
-	if (
-		accessToken &&
-		(request.nextUrl.pathname === `/${locale}/login` ||
-			request.nextUrl.pathname === `/${locale}/register`)
-	) {
-		return NextResponse.redirect(new URL(`/${locale || "ru"}`, request.url));
-	}
-
-	return createMiddleware(routing)(request);
+	return NextResponse.next();
 }
 
 export const config = {

@@ -10,11 +10,11 @@ describe("isEmail", () => {
 	test("should return false for invalid email addresses", () => {
 		expect(isEmail("invalid-email")).toBe(false);
 		expect(isEmail("user@domain")).toBe(false);
-		expect(isEmail("user@.com")).toBe(false);
 		expect(isEmail("user@domain.c")).toBe(false);
+		expect(isEmail("user@.com")).toBe(false);
 		expect(isEmail("user@domain..com")).toBe(false);
+		expect(isEmail("user@example.com@domain.com")).toBe(false);
 		expect(isEmail("user@domain.com.")).toBe(false);
 		expect(isEmail(" user@example.com ")).toBe(false);
-		expect(isEmail("user@example.com@domain.com")).toBe(false);
 	});
 });

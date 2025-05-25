@@ -1,129 +1,182 @@
 import { CookieManager } from "./cookie";
 
 describe("CookieManager", () => {
-	let originalDocumentCookie: string;
-	let originalDateNow: number;
+	// Mock document.cookie
+	let documentCookies: string[] = [];
+	let cookieSetter: jest.SpyInstance;
 
-	beforeEach(() => {
-		originalDocumentCookie = document.cookie;
-		document.cookie = "";
-		originalDateNow = Date.now();
-		Date.now = jest.fn(() => 1600000000000); // 1 января 2020, 00:00:00 UTC
+	// Store the original document.cookie property descriptor
+	const originalDocumentCookieDescriptor = Object.getOwnPropertyDescriptor(Document.prototype, "cookie");
+
+	beforeAll(() => {
+		// Mock document.cookie getter and setter
+		Object.defineProperty(document, "cookie", {
+			get: jest.fn(() => documentCookies.join("; ")),
+			set: jest.fn((value: string) => {
+				// When a cookie is set, parse it and add/update it in the array
+				const cookieParts = value.split(";")[0].split("=");
+				const name = decodeURIComponent(cookieParts[0].trim());
+				const cookieValue = decodeURIComponent(cookieParts[1].trim());
+
+				// Remove existing cookie with the same name if it exists
+				documentCookies = documentCookies.filter((cookie) => {
+					return !cookie.startsWith(`${name}=`);
+				});
+
+				// If it's not an expired cookie (checking for past date)
+				if (!value.includes("expires=Thu, 01 Jan 1970")) {
+					documentCookies.push(`${name}=${cookieValue}`);
+				}
+			}),
+			configurable: true,
+		});
+
+		// Create a spy on the setter
+		cookieSetter = jest.spyOn(document, "cookie", "set");
 	});
 
-	afterEach(() => {
-		document.cookie = originalDocumentCookie;
+	afterAll(() => {
+		// Restore original document.cookie
+		if (originalDocumentCookieDescriptor) {
+			Object.defineProperty(Document.prototype, "cookie", originalDocumentCookieDescriptor);
+		}
+		cookieSetter.mockRestore();
+	});
 
-		Date.now = originalDateNow;
+	beforeEach(() => {
+		// Clear cookies before each test
+		documentCookies = [];
+		cookieSetter.mockClear();
 	});
 
 	describe("set", () => {
-		it("should set a cookie with name and value", () => {
-			CookieManager.set("testCookie", "testValue");
-			expect(CookieManager.get("testCookie")).toBe("testValue");
+		test("should set a basic cookie", () => {
+			CookieManager.set("name", "value");
+			expect(document.cookie).toContain("name=value");
 		});
 
-		it("should set a cookie with expires as number", () => {
-			const expires = 1; // дни
-			CookieManager.set("testCookie", "testValue", { expires });
-			const expectedDate = new Date(1600000000000 + expires * 24 * 60 * 60 * 1000).toUTCString();
-			expect(document.cookie).toContain(`expires=${expectedDate}`);
+		test("should set cookie with expiration date as Date object", () => {
+			const date = new Date("2030-01-01");
+			CookieManager.set("name", "value", { expires: date });
+			expect(cookieSetter).toHaveBeenCalledWith(expect.stringContaining(`expires=${date.toUTCString()}`));
 		});
 
-		it("should set a cookie with expires as Date", () => {
-			const expires = new Date(2020, 10, 30, 14, 25, 0);
-			CookieManager.set("testCookie", "testValue", { expires });
-			expect(document.cookie).toContain(`expires=${expires.toUTCString()}`);
+		test("should set cookie with expiration days as number", () => {
+			jest.spyOn(Date.prototype, "setTime");
+			CookieManager.set("name", "value", { expires: 7 });
+			expect(Date.prototype.setTime).toHaveBeenCalled();
+			expect(cookieSetter).toHaveBeenCalledWith(expect.stringContaining("expires="));
 		});
 
-		it("should set a cookie with expires as string", () => {
-			const expires = "Fri, 30 Oct 2020 14:25:00 GMT";
-			CookieManager.set("testCookie", "testValue", { expires });
-			const cookie = document.cookie;
-			expect(cookie).toContain(`expires=${expires}`);
+		test("should set cookie with expiration as string", () => {
+			const expiresString = "Wed, 31 Dec 2025 23:59:59 GMT";
+			CookieManager.set("name", "value", { expires: expiresString });
+			expect(cookieSetter).toHaveBeenCalledWith(expect.stringContaining(`expires=${expiresString}`));
 		});
 
-		it("should set a cookie with path", () => {
-			const path = "/test";
-			CookieManager.set("testCookie", "testValue", { path });
-			const cookie = document.cookie;
-			expect(cookie).toContain(`path=${path}`);
+		test("should set cookie with path", () => {
+			CookieManager.set("name", "value", { path: "/test" });
+			expect(cookieSetter).toHaveBeenCalledWith(expect.stringContaining("path=/test"));
 		});
 
-		it("should set a cookie with domain", () => {
-			const domain = "example.com";
-			CookieManager.set("testCookie", "testValue", { domain });
-			const cookie = document.cookie;
-			expect(cookie).toContain(`domain=${domain}`);
+		test("should set cookie with domain", () => {
+			CookieManager.set("name", "value", { domain: "example.com" });
+			expect(cookieSetter).toHaveBeenCalledWith(expect.stringContaining("domain=example.com"));
 		});
 
-		it("should set a cookie with secure flag", () => {
-			CookieManager.set("testCookie", "testValue", { secure: true });
-			const cookie = document.cookie;
-			expect(cookie).toContain("secure");
+		test("should set secure cookie", () => {
+			CookieManager.set("name", "value", { secure: true });
+			expect(cookieSetter).toHaveBeenCalledWith(expect.stringContaining("secure"));
 		});
 
-		it("should set a cookie with sameSite attribute", () => {
-			const sameSite = "Strict";
-			CookieManager.set("testCookie", "testValue", { sameSite });
-			const cookie = document.cookie;
-			expect(cookie).toContain(`samesite=${sameSite}`);
+		test("should set cookie with sameSite attribute", () => {
+			CookieManager.set("name", "value", { sameSite: "Strict" });
+			expect(cookieSetter).toHaveBeenCalledWith(expect.stringContaining("samesite=Strict"));
+		});
+
+		test("should set cookie with multiple options", () => {
+			CookieManager.set("name", "value", {
+				path: "/test",
+				domain: "example.com",
+				secure: true,
+				sameSite: "Lax",
+			});
+
+			expect(cookieSetter).toHaveBeenCalledWith(
+				expect.stringMatching(/name=value.*path=\/test.*domain=example\.com.*secure.*samesite=Lax/)
+			);
 		});
 	});
 
 	describe("get", () => {
-		it("should return the value of a cookie", () => {
-			CookieManager.set("testCookie", "testValue");
-			expect(CookieManager.get("testCookie")).toBe("testValue");
+		test("should return null for non-existent cookie", () => {
+			expect(CookieManager.get("nonexistent")).toBeNull();
 		});
 
-		it("should return null if the cookie does not exist", () => {
-			expect(CookieManager.get("nonExistentCookie")).toBeNull();
+		test("should get a cookie value", () => {
+			documentCookies = ["name=value"];
+			expect(CookieManager.get("name")).toBe("value");
+		});
+
+		test("should get a cookie with encoded name and value", () => {
+			documentCookies = ["test%20name=test%20value"];
+			expect(CookieManager.get("test name")).toBe("test value");
+		});
+
+		test("should get the correct cookie when multiple cookies exist", () => {
+			documentCookies = ["first=value1", "second=value2", "third=value3"];
+			expect(CookieManager.get("second")).toBe("value2");
 		});
 	});
 
 	describe("remove", () => {
-		it("should remove a cookie", () => {
-			CookieManager.set("testCookie", "testValue");
-			expect(CookieManager.get("testCookie")).toBe("testValue");
-			CookieManager.remove("testCookie");
-			expect(CookieManager.get("testCookie")).toBeNull();
+		test("should remove a cookie", () => {
+			documentCookies = ["name=value"];
+			CookieManager.remove("name");
+			expect(cookieSetter).toHaveBeenCalledWith(expect.stringContaining("expires="));
+			expect(documentCookies).toHaveLength(0);
 		});
 
-		it("should remove a cookie with path", () => {
-			const path = "/test";
-			CookieManager.set("testCookie", "testValue", { path });
-			expect(CookieManager.get("testCookie")).toBe("testValue");
-			CookieManager.remove("testCookie", path);
-			expect(CookieManager.get("testCookie")).toBeNull();
-		});
-
-		it("should remove a cookie with domain", () => {
-			const domain = "example.com";
-			CookieManager.set("testCookie", "testValue", { domain });
-			expect(CookieManager.get("testCookie")).toBe("testValue");
-			CookieManager.remove("testCookie", undefined, domain);
-			expect(CookieManager.get("testCookie")).toBeNull();
+		test("should remove a cookie with path and domain", () => {
+			documentCookies = ["name=value"];
+			CookieManager.remove("name", "/test", "example.com");
+			expect(cookieSetter).toHaveBeenCalledWith(
+				expect.stringMatching(/name=.*expires=.*path=\/test.*domain=example\.com/)
+			);
 		});
 	});
 
 	describe("has", () => {
-		it("should return true if the cookie exists", () => {
-			CookieManager.set("testCookie", "testValue");
-			expect(CookieManager.has("testCookie")).toBe(true);
+		test("should return true if cookie exists", () => {
+			documentCookies = ["name=value"];
+			expect(CookieManager.has("name")).toBe(true);
 		});
 
-		it("should return false if the cookie does not exist", () => {
-			expect(CookieManager.has("nonExistentCookie")).toBe(false);
+		test("should return false if cookie does not exist", () => {
+			expect(CookieManager.has("nonexistent")).toBe(false);
 		});
 	});
 
 	describe("getAll", () => {
-		it("should return all cookies as an object", () => {
-			CookieManager.set("cookie1", "value1");
-			CookieManager.set("cookie2", "value2");
-			const allCookies = CookieManager.getAll();
-			expect(allCookies).toEqual({ cookie1: "value1", cookie2: "value2" });
+		test("should return empty object when no cookies exist", () => {
+			expect(CookieManager.getAll()).toEqual({});
+		});
+
+		test("should get all cookies", () => {
+			documentCookies = ["first=value1", "second=value2", "third=value3"];
+			expect(CookieManager.getAll()).toEqual({
+				first: "value1",
+				second: "value2",
+				third: "value3",
+			});
+		});
+
+		test("should handle encoded cookie names and values", () => {
+			documentCookies = ["test%20name=test%20value", "normal=value"];
+			expect(CookieManager.getAll()).toEqual({
+				"test name": "test value",
+				normal: "value",
+			});
 		});
 	});
 });

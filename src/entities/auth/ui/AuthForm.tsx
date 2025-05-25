@@ -9,7 +9,12 @@ import { addToast } from "@heroui/toast";
 import { isEmail } from "@/shared/validation/isEmail";
 import { $fetch } from "@/fetch";
 import { CookieManager } from "@/shared/lib/cookie/cookie";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/shared/constants/tokens";
+import {
+	ACCESS_TOKEN,
+	ACCESS_TOKEN_EXPIRES_MINUTES,
+	REFRESH_TOKEN,
+	REFRESH_TOKEN_EXPIRES_DAYS,
+} from "@/shared/constants/tokens";
 
 interface AuthFormProps {
 	type: "login" | "register";
@@ -58,8 +63,18 @@ export const AuthForm: FC<AuthFormProps> = ({ type }) => {
 
 			if (res.status === 200) {
 				if (type === "login") {
-					CookieManager.set(ACCESS_TOKEN, res.data.access_token);
-					CookieManager.set(REFRESH_TOKEN, res.data.refresh_token);
+					CookieManager.set(ACCESS_TOKEN, res.data.access_token, {
+						secure: process.env.NODE_ENV === "production",
+						sameSite: "Strict",
+						expires: new Date(Date.now() + ACCESS_TOKEN_EXPIRES_MINUTES * 60 * 1000),
+						path: "/",
+					});
+					CookieManager.set(REFRESH_TOKEN, res.data.refresh_token, {
+						secure: process.env.NODE_ENV === "production",
+						sameSite: "Strict",
+						expires: new Date(Date.now() + REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000),
+						path: "/",
+					});
 					router.push("/");
 				} else {
 					router.push("/register/email");
@@ -105,20 +120,12 @@ export const AuthForm: FC<AuthFormProps> = ({ type }) => {
 			{type === "register" && (
 				<div className="w-full mt-1 space-y-1">
 					<div className="flex gap-1 h-2">
+						<div className={`w-1/3 rounded-full transition-all ${passwordLevel >= 1 ? "bg-red-500" : "bg-gray-200"}`} />
 						<div
-							className={`w-1/3 rounded-full transition-all ${
-								passwordLevel >= 1 ? "bg-red-500" : "bg-gray-200"
-							}`}
+							className={`w-1/3 rounded-full transition-all ${passwordLevel >= 2 ? "bg-yellow-500" : "bg-gray-200"}`}
 						/>
 						<div
-							className={`w-1/3 rounded-full transition-all ${
-								passwordLevel >= 2 ? "bg-yellow-500" : "bg-gray-200"
-							}`}
-						/>
-						<div
-							className={`w-1/3 rounded-full transition-all ${
-								passwordLevel >= 3 ? "bg-green-500" : "bg-gray-200"
-							}`}
+							className={`w-1/3 rounded-full transition-all ${passwordLevel >= 3 ? "bg-green-500" : "bg-gray-200"}`}
 						/>
 					</div>
 					<p className="text-xs text-gray-500">

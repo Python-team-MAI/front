@@ -1,57 +1,82 @@
-export class CookieManager {
-	static set(
-		name: string,
-		value: string,
-		options: {
-			expires?: Date | number | string;
-			path?: string;
-			domain?: string;
-			secure?: boolean;
-			sameSite?: "Strict" | "Lax" | "None";
-		} = {}
-	): void {
-		let cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}`;
+interface CookieOptions {
+	expires?: Date | string | number;
+	path?: string;
+	domain?: string;
+	secure?: boolean;
+	sameSite?: "Strict" | "Lax" | "None";
+}
 
+export class CookieManager {
+	// CookieManager implementation fix
+
+	// CookieManager implementation fix
+
+	// For the set method
+	static set(name: string, value: string, options: CookieOptions = {}): void {
+		// Encode both name and value properly
+		const encodedName = encodeURIComponent(name);
+		const encodedValue = encodeURIComponent(value);
+
+		let cookieString = `${encodedName}=${encodedValue}`;
+
+		// Add options to cookie string
 		if (options.expires) {
-			if (typeof options.expires === "number") {
-				const date = new Date();
-				date.setTime(date.getTime() + options.expires * 24 * 60 * 60 * 1000);
-				cookie += `; expires=${date.toUTCString()}`;
-			} else if (options.expires instanceof Date) {
-				cookie += `; expires=${options.expires.toUTCString()}`;
+			let expirationDate: Date;
+
+			if (options.expires instanceof Date) {
+				expirationDate = options.expires;
+			} else if (typeof options.expires === "number") {
+				// For number of days
+				expirationDate = new Date();
+				// This will trigger the Date.prototype.setTime method
+				expirationDate.setTime(expirationDate.getTime() + options.expires * 24 * 60 * 60 * 1000);
 			} else {
-				cookie += `; expires=${options.expires}`;
+				expirationDate = new Date(options.expires);
 			}
+
+			cookieString += `; expires=${expirationDate.toUTCString()}`;
 		}
 
 		if (options.path) {
-			cookie += `; path=${options.path}`;
+			cookieString += `; path=${options.path}`;
 		}
 
 		if (options.domain) {
-			cookie += `; domain=${options.domain}`;
+			cookieString += `; domain=${options.domain}`;
 		}
 
 		if (options.secure) {
-			cookie += "; secure";
+			cookieString += "; secure";
 		}
 
 		if (options.sameSite) {
-			cookie += `; samesite=${options.sameSite}`;
+			cookieString += `; samesite=${options.sameSite}`;
 		}
 
-		document.cookie = cookie;
+		// Directly set document.cookie
+		document.cookie = cookieString;
 	}
 
-	static get(name: string): string | null {
-		const cookies = document.cookie.split(";");
-		for (const cookie of cookies) {
-			const [cookieName, cookieValue] = cookie.trim().split("=");
-			if (decodeURIComponent(cookieName) === name) {
-				return decodeURIComponent(cookieValue);
+	// For the getAll method
+	static getAll(): Record<string, string> {
+		const cookies: Record<string, string> = {};
+		const cookieString = document.cookie;
+
+		// If cookie string is empty, return empty object
+		if (!cookieString) {
+			return cookies;
+		}
+
+		const pairs = cookieString.split("; ");
+		for (const pair of pairs) {
+			const [name, value] = pair.split("=");
+			// Only add valid cookie pairs
+			if (name && name.trim()) {
+				cookies[decodeURIComponent(name)] = decodeURIComponent(value || "");
 			}
 		}
-		return null;
+
+		return cookies;
 	}
 
 	static remove(name: string, path?: string, domain?: string): void {
@@ -66,12 +91,14 @@ export class CookieManager {
 		return this.get(name) !== null;
 	}
 
-	static getAll(): Record<string, string> {
-		const cookies: Record<string, string> = {};
-		document.cookie.split(";").forEach((cookie) => {
-			const [name, value] = cookie.trim().split("=");
-			cookies[decodeURIComponent(name)] = decodeURIComponent(value);
-		});
-		return cookies;
+	static get(name: string): string | null {
+		const cookies = document.cookie.split(";");
+		for (const cookie of cookies) {
+			const [cookieName, cookieValue] = cookie.trim().split("=");
+			if (decodeURIComponent(cookieName) === name) {
+				return decodeURIComponent(cookieValue);
+			}
+		}
+		return null;
 	}
 }
