@@ -9,7 +9,7 @@ import {
 	REFRESH_TOKEN_EXPIRES_DAYS,
 } from "@/shared/constants/tokens";
 
-export async function POST(request: NextRequest) {
+export async function GET(request: NextRequest) {
 	try {
 		const url = new URL(request.url);
 		const code = url.searchParams.get("code");
