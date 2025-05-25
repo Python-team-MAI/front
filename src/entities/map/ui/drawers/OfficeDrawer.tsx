@@ -1,26 +1,33 @@
-import { FC } from "react";
+import { Dispatch, FC, SetStateAction, useState } from "react";
 import { Text } from "@react-three/drei";
 import { Office } from "../../model/types/pathTypes";
 import { getContrastingColor } from "@/shared/lib/colors/getContrastingColor";
 import { Euler } from "three";
 import { ThreeIcon } from "@/shared/ui/ThreeIcon";
+import { lightenHexColor } from "@/shared/lib/colors/lightenHexColor";
+import { ModalData } from "../Map";
 
 interface Props {
 	offices: Office[];
 	mode: "2d" | "3d";
+	setModalData: Dispatch<SetStateAction<ModalData>>;
 }
 
-export const OfficeDrawer: FC<Props> = ({ offices, mode }) => {
-	return offices.map((office) => (
+export const OfficeDrawer: FC<Props> = ({ offices, mode, setModalData }) => {
+	const [targetMesh, setTargetMesh] = useState<number>();
+
+	return offices.map((office, i) => (
 		<mesh
-			key={JSON.stringify(office)}
+			key={JSON.stringify(office.name + i)}
 			position={
 				mode === "3d"
 					? [office.coords[0], office.coords[1] + office.width / 2, office.coords[2]]
 					: [office.coords[0], 0, office.coords[2]]
 			}
 			castShadow
-			onClick={() => console.log(office)}
+			onClick={() => setModalData({ isOpen: true, office_id: office.id })}
+			onPointerOut={() => setTargetMesh(undefined)}
+			onPointerOver={() => setTargetMesh(i)}
 		>
 			{office.type === "stairs" && (
 				<ThreeIcon
@@ -56,7 +63,7 @@ export const OfficeDrawer: FC<Props> = ({ offices, mode }) => {
 			<boxGeometry
 				args={mode === "3d" ? [office.length, office.width, office.height] : [office.length, 0, office.height]}
 			/>
-			<meshMatcapMaterial color={office.color} />
+			<meshStandardMaterial color={i == targetMesh ? lightenHexColor(office.color, 70) : office.color} />
 		</mesh>
 	));
 };

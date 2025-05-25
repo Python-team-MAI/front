@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "./shared/constants/tokens";
+import {
+	ACCESS_TOKEN,
+	ACCESS_TOKEN_EXPIRES_MINUTES,
+	REFRESH_TOKEN,
+	REFRESH_TOKEN_EXPIRES_DAYS,
+} from "./shared/constants/tokens";
 import { $fetch } from "@/fetch";
 import { checkLocale } from "./shared/lib/utils/middleware/getLocale";
 
@@ -35,14 +40,11 @@ export async function middleware(request: NextRequest) {
 
 					const res = NextResponse.redirect(request.url);
 
-					const accessTokenMinutes = Number(process.env.ACCESS_TOKEN_EXPIRES) || 60;
-					const refreshTokenDays = Number(process.env.REFRESH_TOKEN_EXPIRES) || 1;
-
 					res.cookies.set(ACCESS_TOKEN, data.access_token, {
 						httpOnly: true,
 						secure: process.env.NODE_ENV === "production",
 						sameSite: "strict",
-						maxAge: accessTokenMinutes * 60,
+						maxAge: ACCESS_TOKEN_EXPIRES_MINUTES,
 						path: "/",
 					});
 
@@ -50,7 +52,7 @@ export async function middleware(request: NextRequest) {
 						httpOnly: true,
 						secure: process.env.NODE_ENV === "production",
 						sameSite: "strict",
-						maxAge: refreshTokenDays * 60,
+						maxAge: REFRESH_TOKEN_EXPIRES_DAYS,
 						path: "/",
 					});
 

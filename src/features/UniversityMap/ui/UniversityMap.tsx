@@ -1,11 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import testMap1 from "@/public/maps/test_map_1.json";
 import testMap2 from "@/public/maps/test_map_2.json";
 import vertConnections from "@/public/maps/all_vertical_connections.json";
 import { Button } from "@heroui/button";
 import { PathForm } from "./PathForm";
 import { DynamicMap, IBuildingGraph, INode, IVerticalConnection, NavigationSystem, Office } from "@/entities/map";
+import { Modal, ModalContent, useDisclosure } from "@heroui/modal";
+import { ModalData } from "@/entities/map/ui/Map";
+import { ChatRoom } from "@/entities/chat/ui/ChatRoom";
 
 export const UniversityMap = () => {
 	const [floor, setFloor] = useState<number>(1);
@@ -17,6 +20,17 @@ export const UniversityMap = () => {
 
 	const [instructions, setInstructions] = useState<string[]>();
 	const [path, setPath] = useState<string[]>();
+	const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+
+	const [modalData, setModalData] = useState<ModalData>({ isOpen: false, office_id: 0 });
+
+	useEffect(() => {
+		if (modalData.isOpen) {
+			onOpen();
+		} else {
+			onClose();
+		}
+	}, [modalData]);
 
 	const findPath = async (fromId: string, toId: string) => {
 		const buildingGraph: IBuildingGraph = {
@@ -32,6 +46,7 @@ export const UniversityMap = () => {
 			],
 			verticalConnections: vertConnections as IVerticalConnection[],
 		};
+
 		try {
 			const navSystem = new NavigationSystem(buildingGraph);
 			const path = await navSystem.findPath(fromId, toId);
@@ -44,40 +59,53 @@ export const UniversityMap = () => {
 	};
 
 	return (
-		<div className="">
-			<div className="relative h-[80vh] max-md:h-[70vh]">
-				{officesMapper[floor as 1 | 2] && (
-					<DynamicMap
-						offices={officesMapper[floor as 1 | 2]}
-						mode={mode}
-						path={path}
-						nodes={nodesMapper[floor as 1 | 2]}
-					/>
-				)}
-				<Button onPress={() => setMode(mode === "2d" ? "3d" : "2d")} className="absolute right-4 top-4 rounded-full">
-					{mode === "2d" ? "2D" : "3D"}
-				</Button>
-			</div>
-			<div className="p-2">
-				<div className="flex max-md:grid max-md:grid-cols-4 mb-3 gap-1 items-center justify-evenly">
-					{[1, 2, 3, 4, 5, 6, 7].map((num) => (
-						<Button
-							variant={num === floor ? "faded" : "bordered"}
-							className="rounded-full"
-							key={num}
-							onPress={() => setFloor(num)}
-						>
-							{num}
-						</Button>
-					))}
+		<>
+			<Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+				<ModalContent className="w-[80vw] h-[80vh] p-2">
+					{() => (
+						<div>
+							<div></div>
+							<ChatRoom chatId={2} />
+						</div>
+					)}
+				</ModalContent>
+			</Modal>
+			<div className="grid grid-cols-[3fr_2fr] max-md:grid-cols-1">
+				<div className="relative h-[80vh] max-md:h-[70vh]">
+					{officesMapper[floor as 1 | 2] && (
+						<DynamicMap
+							offices={officesMapper[floor as 1 | 2]}
+							mode={mode}
+							path={path}
+							nodes={nodesMapper[floor as 1 | 2]}
+							setModalData={setModalData}
+						/>
+					)}
+					<Button onPress={() => setMode(mode === "2d" ? "3d" : "2d")} className="absolute right-4 top-4 rounded-full">
+						{mode === "2d" ? "2D" : "3D"}
+					</Button>
 				</div>
-				<div className="flex flex-col gap-3">
-					<PathForm findPath={findPath} nodeMapper={nodesMapper} />
-					{instructions?.map((instr, i) => (
-						<p key={i}>{instr}</p>
-					))}
+				<div className="p-2">
+					<div className="flex max-md:grid max-md:grid-cols-4 mb-3 gap-1 items-center justify-evenly">
+						{[1, 2, 3, 4, 5, 6, 7].map((num) => (
+							<Button
+								variant={num === floor ? "faded" : "bordered"}
+								className="rounded-full"
+								key={num}
+								onPress={() => setFloor(num)}
+							>
+								{num}
+							</Button>
+						))}
+					</div>
+					<div className="flex flex-col gap-3">
+						<PathForm findPath={findPath} nodeMapper={nodesMapper} />
+						{instructions?.map((instr, i) => (
+							<p key={i}>{instr}</p>
+						))}
+					</div>
 				</div>
 			</div>
-		</div>
+		</>
 	);
 };

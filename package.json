@@ -33,7 +33,7 @@
         "@heroui/tabs": "2.2.11",
         "@heroui/theme": "2.4.9",
         "@react-three/drei": "^9.121.4",
-        "@react-three/fiber": "^9.0.0-alpha.8",
+        "@react-three/fiber": "^9.1.2",
         "@reduxjs/toolkit": "^2.5.0",
         "@types/three": "^0.172.0",
         "@uiw/react-md-editor": "^4.0.6",
