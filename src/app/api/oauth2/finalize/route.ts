@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
 			return Response.json({ error: "Code parameter is required" }, { status: 400 });
 		}
 
-		const response = await $fetch(`/oauth2/finalize?code=${code}`, {
+		const response = await $fetch(`/auth/oauth2/finalize?code=${code}`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
