@@ -49,11 +49,11 @@ export async function GET(request: NextRequest) {
 			maxAge: REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000,
 			path: "/",
 		});
-
-		redirect("/ru");
 	} catch (error) {
 		console.error("OAuth finalization error:", error);
 
-		return Response.json({ error: "Internal server error" }, { status: 500 });
+		return Response.json({ error: "Internal server error", details: error }, { status: 500 });
+	} finally {
+		redirect("/ru");
 	}
 }

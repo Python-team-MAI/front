@@ -9,8 +9,12 @@ import { $fetch } from "@/fetch";
 import { checkLocale } from "./shared/lib/utils/middleware/getLocale";
 
 const notAuthRoutes = ["/login", "/register", "/register/email", "/register/success"];
+const notAuthApiRoutes = ["/api/oauth2/finalize"];
 
-const getNotAuthRoutes = (locale: string) => notAuthRoutes.map((route) => `/${locale}${route}`);
+const getNotAuthRoutes = (locale: string) => [
+	...notAuthRoutes.map((route) => `/${locale}${route}`),
+	...notAuthApiRoutes,
+];
 
 export async function middleware(request: NextRequest) {
 	const accessToken = request.cookies.get(ACCESS_TOKEN)?.value;
@@ -22,7 +26,6 @@ export async function middleware(request: NextRequest) {
 	if (getNotAuthRoutes(locale).includes(pathname)) {
 		return NextResponse.next();
 	}
-	console.log("middleware");
 
 	if (!accessToken) {
 		if (refreshToken) {
@@ -62,7 +65,6 @@ export async function middleware(request: NextRequest) {
 				console.error("Ошибка при обновлении токена:", error);
 			}
 		}
-		console.log("!refreshToken");
 		const url = request.nextUrl.clone();
 		url.pathname = `/${locale}/login`;
 
