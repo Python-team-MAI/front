@@ -9,7 +9,5 @@ export default async function DeadlinesPage() {
 	const res = await $fetch("/deadlines", { headers: { Authorization: `Bearer ${accessToken}` } });
 	const deadlines = (await res.json()) || [];
 
-	console.log(deadlines);
-
 	return <DeadlinePageContent deadlines={deadlines} />;
 }

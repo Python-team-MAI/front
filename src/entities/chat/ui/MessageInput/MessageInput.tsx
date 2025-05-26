@@ -15,7 +15,6 @@ export const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => 
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		console.log(message);
 		if (message.trim()) {
 			onSendMessage(message, isAnonymous);
 			setMessage("");

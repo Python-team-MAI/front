@@ -48,7 +48,6 @@ const DeadlineCreateModal: FC<Props> = ({ isOpen, onOpenChange, setDeadlines }) 
 	};
 
 	const onCreate = async () => {
-		console.log(deadline);
 		if (Object.entries(deadline).filter(Boolean).length < 5) {
 			addToast({ color: "danger", title: "Заполните все поля!" });
 			return;
@@ -67,7 +66,6 @@ const DeadlineCreateModal: FC<Props> = ({ isOpen, onOpenChange, setDeadlines }) 
 					date_to: toDate.toDate(getLocalTimeZone()).toISOString(),
 				},
 			});
-			console.log(res.data);
 
 			if (res.status === 200) {
 				setDeadlines((prev) => [...prev, res.data]);

@@ -18,8 +18,6 @@ export const MessageList: React.FC<MessageListProps> = ({ messages }) => {
 		return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 	};
 
-	console.log(messages);
-
 	return (
 		<div className="flex-1 p-4 overflow-y-auto">
 			{messages.length === 0 ? (

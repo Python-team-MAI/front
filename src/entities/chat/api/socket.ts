@@ -23,7 +23,6 @@ class SocketService {
 
 			socketIo.on("connect", () => {
 				this.socket = socketIo;
-				console.log("Socket connected with ID:", socketIo.id);
 				resolve(socketIo);
 			});
 
