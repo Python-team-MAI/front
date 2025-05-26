@@ -5,7 +5,7 @@ import { Input } from "@heroui/input";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/navigation";
 import { FC, useState } from "react";
-import { addToast } from "@heroui/toast";
+import { addToast } from "@heroui/react";
 import { isEmail } from "@/shared/validation/isEmail";
 import { $fetch } from "@/fetch";
 import { CookieManager } from "@/shared/lib/cookie/cookie";
@@ -14,6 +14,7 @@ import {
 	ACCESS_TOKEN_EXPIRES_MINUTES,
 	REFRESH_TOKEN,
 	REFRESH_TOKEN_EXPIRES_DAYS,
+	USER,
 } from "@/shared/constants/tokens";
 
 interface AuthFormProps {
@@ -70,6 +71,15 @@ export const AuthForm: FC<AuthFormProps> = ({ type }) => {
 						path: "/",
 					});
 					CookieManager.set(REFRESH_TOKEN, res.data.refresh_token, {
+						secure: process.env.NODE_ENV === "production",
+						sameSite: "Strict",
+						expires: new Date(Date.now() + REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000),
+						path: "/",
+					});
+					const user = await $fetch<false>("/auth/me", {
+						headers: { Authorization: `Bearer ${res.data.access_token}` },
+					});
+					CookieManager.set(USER, JSON.stringify(user.data), {
 						secure: process.env.NODE_ENV === "production",
 						sameSite: "Strict",
 						expires: new Date(Date.now() + REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000),

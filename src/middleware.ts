@@ -23,6 +23,10 @@ export async function middleware(request: NextRequest) {
 	const { pathname } = request.nextUrl;
 	const locale = checkLocale(pathname);
 
+	if (request.referrer.includes("/api")) {
+		return NextResponse.next();
+	}
+
 	if (getNotAuthRoutes(locale).includes(pathname)) {
 		return NextResponse.next();
 	}
