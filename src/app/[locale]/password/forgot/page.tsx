@@ -11,16 +11,12 @@ const ForgotPasswordPage = async ({ params }: { params: Promise<{ locale: Locale
 		"use server";
 		const email = formData.get("email");
 
-		const res = await $fetch("/mail/reset-password", {
+		const res = await $fetch("/auth/password-reset-request", {
 			method: "POST",
 			body: JSON.stringify({
-				addresses: [email],
-				subject: "Reset password",
-				message: "reset_password",
+				email,
 			}),
 		});
-
-		console.log(res);
 
 		if (res.ok) {
 			redirect({ href: "/ru/login", locale });
