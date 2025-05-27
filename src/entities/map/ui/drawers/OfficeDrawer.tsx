@@ -1,11 +1,11 @@
 import { Dispatch, FC, SetStateAction, useState } from "react";
 import { Text } from "@react-three/drei";
 import { Office } from "../../model/types/pathTypes";
-import { getContrastingColor } from "@/shared/lib/colors/getContrastingColor";
 import { Euler } from "three";
 import { ThreeIcon } from "@/shared/ui/ThreeIcon";
-import { lightenHexColor } from "@/shared/lib/colors/lightenHexColor";
 import { ModalData } from "../Map";
+import { getContrastingColor } from "@/shared/lib/utils/colors/getContrastingColor";
+import { lightenHexColor } from "@/shared/lib/utils/colors/lightenHexColor";
 
 interface Props {
 	offices: Office[];

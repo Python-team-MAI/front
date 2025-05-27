@@ -4,18 +4,20 @@ import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
 import { ChangeEvent, Dispatch, FC, SetStateAction, useState } from "react";
-import { CookieManager } from "@/shared/lib/cookie/cookie";
+import { CookieManager } from "@/shared/lib/utils/cookie/cookie";
 import { USER } from "@/shared/constants/tokens";
 import { User } from "@/entities/user";
-import { addToast, DatePicker } from "@heroui/react";
+import { addToast, DateInput } from "@heroui/react";
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
 import { $fetch } from "@/fetch";
 import { Deadline } from "../model/types/Deadline";
+import moment from "moment";
 
 interface Props {
 	onOpenChange: () => void;
 	isOpen: boolean;
 	setDeadlines: Dispatch<SetStateAction<Deadline[]>>;
+	onClose: () => void;
 }
 
 interface CreateDeadline {
@@ -26,10 +28,11 @@ interface CreateDeadline {
 	description: string;
 }
 
-const DeadlineCreateModal: FC<Props> = ({ isOpen, onOpenChange, setDeadlines }) => {
+const DeadlineCreateModal: FC<Props> = ({ isOpen, onOpenChange, setDeadlines, onClose }) => {
 	const [fromDate, setFromDate] = useState(parseDate(new Date().toISOString().split("T")[0]));
 	const [toDate, setToDate] = useState(parseDate(new Date().toISOString().split("T")[0]));
 	const user: User = JSON.parse(CookieManager.get(USER) || "{}");
+	const [isLoading, setIsLoading] = useState(false);
 	const [deadline, setDeadline] = useState<CreateDeadline>({
 		author_id: user.id,
 		description: "",
@@ -58,6 +61,7 @@ const DeadlineCreateModal: FC<Props> = ({ isOpen, onOpenChange, setDeadlines }) 
 		}
 
 		try {
+			setIsLoading(true);
 			const res = await $fetch<false>("/deadlines/personal", {
 				method: "POST",
 				data: {
@@ -67,12 +71,33 @@ const DeadlineCreateModal: FC<Props> = ({ isOpen, onOpenChange, setDeadlines }) 
 				},
 			});
 
-			if (res.status === 200) {
-				setDeadlines((prev) => [...prev, res.data]);
+			if (res.status >= 200 && res.status < 300) {
+				console.log(res.data);
+				setDeadlines((prev) => [
+					...prev,
+					{
+						...res.data,
+						date_to: moment(res.data.date_to).add(3, "hour").toISOString(),
+						date_from: moment(res.data.date_from).add(3, "hour").toISOString(),
+					},
+				]);
+				setDeadline({
+					author_id: user.id,
+					description: "",
+					lesson: "",
+					name: "",
+					teacher: "",
+				});
+				setFromDate(parseDate(new Date().toISOString().split("T")[0]));
+				setToDate(parseDate(new Date().toISOString().split("T")[0]));
+				addToast({ color: "success", title: "Успешно добавлен!" });
 			}
 		} catch (e) {
 			addToast({ color: "danger", title: "Ошибка!" });
 			console.log(e);
+		} finally {
+			onClose();
+			setIsLoading(false);
 		}
 	};
 
@@ -81,7 +106,7 @@ const DeadlineCreateModal: FC<Props> = ({ isOpen, onOpenChange, setDeadlines }) 
 			<ModalContent>
 				<div className="p-4">
 					<ModalHeader>
-						<p>Создание ддл</p>
+						<p>Создание дедлайна</p>
 					</ModalHeader>
 					<ModalBody>
 						<div className="flex flex-col gap-2">
@@ -91,12 +116,12 @@ const DeadlineCreateModal: FC<Props> = ({ isOpen, onOpenChange, setDeadlines }) 
 							<Input label="Препод" {...setInputProps("teacher")} />
 							{/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
 							{/* @ts-ignore */}
-							<DatePicker label="От" value={fromDate} onChange={setFromDate} />
+							<DateInput label="От (?)" value={fromDate} onChange={setFromDate} />
 							{/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
 							{/* @ts-ignore */}
-							<DatePicker label="До" value={toDate} onChange={setToDate} />
+							<DateInput label="До" value={toDate} onChange={setToDate} />
 						</div>
-						<Button onPress={onCreate} color="primary">
+						<Button isLoading={isLoading} onPress={onCreate} color="primary">
 							Создать
 						</Button>
 					</ModalBody>

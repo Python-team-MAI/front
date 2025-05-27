@@ -8,7 +8,7 @@ import {
 import { $fetch } from "@/fetch";
 import { checkLocale } from "./shared/lib/utils/middleware/getLocale";
 
-const notAuthRoutes = ["/login", "/register", "/register/email", "/register/success"];
+const notAuthRoutes = ["/login", "/register", "/register/email", "/register/success", "/password/forgot"];
 const notAuthApiRoutes = ["/api/oauth2/finalize"];
 
 const getNotAuthRoutes = (locale: string) => [
@@ -28,6 +28,9 @@ export async function middleware(request: NextRequest) {
 	}
 
 	if (getNotAuthRoutes(locale).includes(pathname)) {
+		if (accessToken) {
+			return NextResponse.next();
+		}
 		return NextResponse.next();
 	}
 

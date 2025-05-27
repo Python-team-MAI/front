@@ -10,12 +10,12 @@ import { useDisclosure } from "@heroui/modal";
 
 export const DeadlinePageContent = (props: { deadlines: Deadline[] }) => {
 	const [deadlines, setDeadlines] = useState<Deadline[]>(props.deadlines);
-	const { isOpen, onOpen, onOpenChange } = useDisclosure();
+	const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 	const groupedDeadlines = groupDeadlinesByDay(deadlines);
 
 	return (
 		<div className="container mx-auto py-10">
-			<DeadlineCreateModal isOpen={isOpen} onOpenChange={onOpenChange} setDeadlines={setDeadlines} />
+			<DeadlineCreateModal onClose={onClose} isOpen={isOpen} onOpenChange={onOpenChange} setDeadlines={setDeadlines} />
 			<DeadlinesHeader onOpenModal={onOpen} />
 			<Tabs defaultValue="list">
 				<TabsList className="mb-6">
@@ -28,7 +28,7 @@ export const DeadlinePageContent = (props: { deadlines: Deadline[] }) => {
 						Gantt Chart
 					</TabsTrigger>
 				</TabsList>
-				<DeadlinesList groupedDeadlines={groupedDeadlines} />
+				<DeadlinesList setDeadlines={setDeadlines} groupedDeadlines={groupedDeadlines} />
 				<DeadlinesGantt deadlines={deadlines} />
 			</Tabs>
 		</div>

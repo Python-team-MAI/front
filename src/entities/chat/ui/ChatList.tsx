@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import { chatApi } from "../api/chatApi";
 import { ChatRead } from "../model/types/message";
 import { Button } from "@heroui/button";
+import { Input } from "@heroui/input";
+import { useDebounce } from "@/shared/hooks";
+import { smartSearch } from "@/shared/lib/utils/search/smartSearch";
 
 interface ChatListProps {
 	selectedChatId?: number;
@@ -11,8 +14,11 @@ interface ChatListProps {
 
 export const ChatList: React.FC<ChatListProps> = ({ selectedChatId, onSelectChat }) => {
 	const [chats, setChats] = useState<ChatRead[]>([]);
+	const [searchChats, setSearchChats] = useState<ChatRead[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	const [search, setSearch] = useState("");
+	const debouncesSearch = useDebounce(search, 300);
 
 	useEffect(() => {
 		const fetchChats = async () => {
@@ -32,6 +38,15 @@ export const ChatList: React.FC<ChatListProps> = ({ selectedChatId, onSelectChat
 		fetchChats();
 	}, []);
 
+	useEffect(() => {
+		const searched = smartSearch(chats, debouncesSearch, { limit: 20 }).map(({ id }) => id);
+		if (debouncesSearch === "") {
+			setSearchChats(chats);
+		} else {
+			setSearchChats(chats.filter(({ id }) => searched.includes(id)));
+		}
+	}, [debouncesSearch, chats]);
+
 	return (
 		<div className="p-4 rounded-lg shadow-md h-full">
 			<h2 className="text-xl font-semibold mb-4">Chats</h2>
@@ -43,15 +58,14 @@ export const ChatList: React.FC<ChatListProps> = ({ selectedChatId, onSelectChat
 			{!loading && chats.length === 0 && <div className="text-center py-4">No chats found</div>}
 
 			<ul className="space-y-2">
-				{chats.map((chat) => (
+				<Input label="Найдите свою аудиторию" value={search} onChange={(e) => setSearch(e.target.value)} />
+				{searchChats.map((chat) => (
 					<li key={chat.id}>
 						<Button
 							color={selectedChatId === chat.id ? "secondary" : "primary"}
 							isDisabled={selectedChatId === chat.id}
 							onPress={() => onSelectChat(chat.id)}
-							className={`w-full text-left px-4 py-2 rounded-md ${
-								selectedChatId === chat.id ? "font-medium" : ""
-							}`}
+							className={`w-full text-left px-4 py-2 rounded-md ${selectedChatId === chat.id ? "font-medium" : ""}`}
 						>
 							<div className="font-medium">{chat.name}</div>
 							<div className="text-sm">Type: {chat.type}</div>

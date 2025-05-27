@@ -2,16 +2,17 @@ import { TabsContent } from "@/shared/ui/Tabs";
 import { Card } from "@heroui/card";
 import { Badge } from "@heroui/badge";
 import { CalendarDays } from "lucide-react";
-import { FC } from "react";
+import { Dispatch, FC, SetStateAction } from "react";
 import { Deadline } from "../model/types/Deadline";
 import { getDateLabel } from "@/shared/lib/utils/deadlines/getDateLabel";
 import { DeadlineCard } from "./DeadlineCard";
 
 interface Props {
 	groupedDeadlines: [string, Deadline[]][];
+	setDeadlines: Dispatch<SetStateAction<Deadline[]>>;
 }
 
-export const DeadlinesList: FC<Props> = ({ groupedDeadlines }) => {
+export const DeadlinesList: FC<Props> = ({ groupedDeadlines, setDeadlines }) => {
 	return (
 		<TabsContent value="list">
 			{groupedDeadlines.length === 0 ? (
@@ -31,7 +32,7 @@ export const DeadlinesList: FC<Props> = ({ groupedDeadlines }) => {
 
 						<div className="grid gap-4">
 							{items.map((deadline) => (
-								<DeadlineCard deadline={deadline} key={deadline.id} />
+								<DeadlineCard setDeadlines={setDeadlines} deadline={deadline} key={deadline.id} />
 							))}
 						</div>
 					</div>

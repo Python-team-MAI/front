@@ -3,12 +3,12 @@
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { useTranslations } from "next-intl";
-import { useRouter } from "@/navigation";
+import { Link, useRouter } from "@/navigation";
 import { FC, useState } from "react";
 import { addToast } from "@heroui/react";
 import { isEmail } from "@/shared/validation/isEmail";
 import { $fetch } from "@/fetch";
-import { CookieManager } from "@/shared/lib/cookie/cookie";
+import { CookieManager } from "@/shared/lib/utils/cookie/cookie";
 import {
 	ACCESS_TOKEN,
 	ACCESS_TOKEN_EXPIRES_MINUTES,
@@ -157,6 +157,7 @@ export const AuthForm: FC<AuthFormProps> = ({ type }) => {
 			>
 				{t(type === "login" ? "sign in" : "sign up")}
 			</Button>
+			{type === "login" && <Link href="/password/forgot">Забыли пароль?</Link>}
 		</form>
 	);
 };

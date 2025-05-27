@@ -7,6 +7,7 @@ import {
 	ACCESS_TOKEN_EXPIRES_MINUTES,
 	REFRESH_TOKEN,
 	REFRESH_TOKEN_EXPIRES_DAYS,
+	USER,
 } from "@/shared/constants/tokens";
 
 export async function GET(request: NextRequest) {
@@ -49,9 +50,18 @@ export async function GET(request: NextRequest) {
 			maxAge: REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000,
 			path: "/",
 		});
+		const userRes = await $fetch("/auth/me", {
+			headers: { Authorization: `Bearer ${access_token}` },
+		});
+		const user = await userRes.json();
+		cookieStore.set(USER, JSON.stringify(user), {
+			secure: process.env.NODE_ENV === "production",
+			sameSite: "strict",
+			expires: new Date(Date.now() + REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000),
+			path: "/",
+		});
 	} catch (error) {
 		console.error("OAuth finalization error:", error);
-
 		return Response.json({ error: "Internal server error", details: error }, { status: 500 });
 	} finally {
 		redirect("/ru");
