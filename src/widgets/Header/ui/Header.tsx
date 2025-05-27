@@ -1,31 +1,32 @@
-'use client'
+"use client";
 
-import { usePathname } from '@/entities/i18n/routing'
-import { ShortHeader } from './components/ShortHeader'
-import { TabBar } from './components/TabBar'
-import { LongHeader } from './components/LongHeader'
-import { FC } from 'react'
-import { ShortestHeader } from './components/ShortestHeader'
+import { usePathname } from "@/entities/i18n/routing";
+import { ShortHeader } from "./components/ShortHeader";
+import { TabBar } from "./components/TabBar";
+import { LongHeader } from "./components/LongHeader";
+import { FC } from "react";
+import { ShortestHeader } from "./components/ShortestHeader";
+import { notAuthRoutes } from "@/middleware";
 
 interface HeaderProps {
-    isShort?: boolean
+	isShort?: boolean;
 }
 
 export const Header: FC<HeaderProps> = ({ isShort }) => {
-    const pathname = usePathname()
+	const pathname = usePathname();
 
-    if (isShort) {
-        return <ShortestHeader />
-    }
+	if (isShort) {
+		return <ShortestHeader />;
+	}
 
-    if (pathname === '/login' || pathname === '/register' || pathname === '/register/info') {
-        return <ShortHeader />
-    }
+	if (notAuthRoutes.includes(pathname)) {
+		return <ShortHeader />;
+	}
 
-    return (
-        <>
-            <LongHeader />
-            <TabBar />
-        </>
-    )
-}
+	return (
+		<>
+			<LongHeader />
+			<TabBar />
+		</>
+	);
+};
