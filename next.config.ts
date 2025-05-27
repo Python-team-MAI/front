@@ -5,6 +5,7 @@ const withNextIntl = createNextIntlPlugin("./src/entities/i18n/request.ts");
 
 const nextConfig: NextConfig = {
 	transpilePackages: ["three"],
+	output: "standalone",
 	reactStrictMode: false,
 };
 
