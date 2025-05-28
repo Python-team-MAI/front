@@ -4,6 +4,7 @@ import {
 	ACCESS_TOKEN_EXPIRES_MINUTES,
 	REFRESH_TOKEN,
 	REFRESH_TOKEN_EXPIRES_DAYS,
+	USER,
 } from "./shared/constants/tokens";
 import { $fetch } from "@/fetch";
 import { checkLocale } from "./shared/lib/utils/middleware/getLocale";
@@ -66,6 +67,18 @@ export async function middleware(request: NextRequest) {
 					});
 
 					res.cookies.set(REFRESH_TOKEN, data.refresh_token, {
+						httpOnly: true,
+						secure: process.env.NODE_ENV === "production",
+						sameSite: "strict",
+						maxAge: REFRESH_TOKEN_EXPIRES_DAYS,
+						path: "/",
+					});
+
+					const userRes = await $fetch("/auth/me", {
+						headers: { Authorization: `Bearer ${data.access_token}` },
+					});
+					const user = await userRes.json();
+					res.cookies.set(USER, JSON.stringify(user), {
 						httpOnly: true,
 						secure: process.env.NODE_ENV === "production",
 						sameSite: "strict",

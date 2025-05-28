@@ -1,0 +1,250 @@
+/* app/assistant/AssistantPage.module.css */
+.container {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(to bottom right, #111827, #1f2937);
+  color: white;
+  height: 100%;
+  width: 100%;
+}
+
+.header {
+  padding: 1rem;
+  border-bottom: 1px solid #374151;
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+.botAvatarFallback {
+  background-color: #2563eb;
+}
+
+.userAvatarFallback {
+  background-color: #059669;
+}
+
+.botIcon {
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+.smallIcon {
+  height: 1rem;
+  width: 1rem;
+}
+
+.messageArea {
+  flex: 1;
+  padding: 1rem;
+}
+
+.messagesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 2.5rem 0;
+  color: #6b7280;
+}
+
+.emptyStateIcon {
+  margin: 0 auto;
+  height: 3rem;
+  width: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.emptyStateTitle {
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.emptyStateSubtitle {
+  margin-top: 0.25rem;
+}
+
+.userMessageContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.assistantMessageContainer {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.userMessageWrapper {
+  display: flex;
+  gap: 0.75rem;
+  max-width: 80%;
+  flex-direction: row-reverse;
+}
+
+.assistantMessageWrapper {
+  display: flex;
+  gap: 0.75rem;
+  max-width: 80%;
+}
+
+.messageAvatar {
+  height: 2rem;
+  width: 2rem;
+  margin-top: 0.25rem;
+}
+
+.userMessage {
+  border: 0;
+  max-width: 70%;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  background-color: #2563eb;
+  color: white;
+}
+
+.assistantMessage {
+  border: 0;
+  max-width: 70%;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  background-color: rgba(31, 41, 55, 0.8);
+  color: white;
+}
+
+.messageContent {
+  padding: 0.75rem;
+}
+
+.messageTextWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.messageText {
+  white-space: pre-wrap;
+}
+
+.messageTime {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  text-align: right;
+}
+
+.typingWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.typingText {
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+.inputArea {
+  border-top: 1px solid #374151;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+}
+
+.inputContainer {
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+.inputWrapper {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.input {
+  background-color: #1f2937;
+  border-color: #374151;
+  color: white;
+}
+
+.input:focus-visible {
+  ring-color: #2563eb;
+}
+
+.sendButton {
+  background-color: #2563eb;
+}
+
+.sendButton:hover {
+  background-color: #1d4ed8;
+}
+
+.loadingIcon, .sendIcon {
+  height: 1rem;
+  width: 1rem;
+}
+
+.loadingIcon {
+  animation: spin 1s linear infinite;
+}
+
+.typingIndicator {
+  display: flex;
+  align-items: center;
+}
+
+.typingIndicator span {
+  height: 8px;
+  width: 8px;
+  margin: 0 2px;
+  background-color: #8b5cf6;
+  border-radius: 50%;
+  display: inline-block;
+  opacity: 0.7;
+}
+
+.typingIndicator span:nth-child(1) {
+  animation: bounce 1.2s infinite 0.1s;
+}
+.typingIndicator span:nth-child(2) {
+  animation: bounce 1.2s infinite 0.3s;
+}
+.typingIndicator span:nth-child(3) {
+  animation: bounce 1.2s infinite 0.5s;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
