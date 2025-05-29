@@ -18,6 +18,7 @@ class SocketService {
 					access_token,
 					chat_id: chatId,
 				},
+				secure: true,
 				transports: ["websocket"],
 			});
 

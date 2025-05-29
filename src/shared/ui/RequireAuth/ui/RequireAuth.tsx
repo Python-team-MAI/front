@@ -8,7 +8,7 @@ export default async function withRequireAuth(children: ReactNode) {
 		const { locale } = await params;
 
 		if (!user) {
-			redirect({ href: "/login", locale });
+			redirect({ href: "/ru/login", locale });
 		}
 
 		return children;

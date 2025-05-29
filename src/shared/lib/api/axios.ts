@@ -70,7 +70,7 @@ axiosInstance.interceptors.response.use(
 			} catch (refreshError) {
 				document.cookie = "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 				document.cookie = "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-				window.location.href = "/login";
+				window.location.href = "/ru/login";
 				processQueue(refreshError as string, undefined);
 				return Promise.reject(refreshError);
 			} finally {
