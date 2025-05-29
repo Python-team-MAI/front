@@ -4,34 +4,41 @@ import { chatApi } from "../api/chatApi";
 import { socketService } from "../api/socket";
 import { MessageList } from "./MessageList";
 import { MessageInput } from "./MessageInput/MessageInput";
-import { Button } from "@heroui/button";
+import { Office } from "@/entities/map";
 
 interface ChatRoomProps {
-	chatId: number | undefined;
+	chatId?: number | undefined;
+	office?: Office;
 }
 
-export const ChatRoom: React.FC<ChatRoomProps> = ({ chatId }) => {
+export const ChatRoom: React.FC<ChatRoomProps> = ({ chatId, office }) => {
 	const [messages, setMessages] = useState<MessageRead[]>([]);
 	const [chat, setChat] = useState<ChatRead | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
-	const [connected, setConnected] = useState(false);
 
 	useEffect(() => {
 		const initChat = async () => {
-			if (!chatId) return;
-
 			try {
 				setLoading(true);
 
-				const chatData = await chatApi.getChatById(chatId);
+				let chatData: ChatRead;
+				if (chatId) {
+					chatData = await chatApi.getChatById(chatId);
+				} else {
+					chatData = await chatApi.createChat({
+						name: office!.name,
+						office_id: office!.id,
+						type: office!.type!,
+					});
+				}
+
 				setChat(chatData);
 
-				const messagesData = await chatApi.getChatMessages(chatId);
+				const messagesData = await chatApi.getChatMessages(chatData.id);
 				setMessages(messagesData.map((message) => ({ message })));
 
-				await socketService.connect(chatId);
-				setConnected(true);
+				await socketService.connect(chatData.id);
 				setLoading(false);
 
 				socketService.onChatMessage((data) => {
@@ -68,28 +75,16 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({ chatId }) => {
 		};
 	}, [chatId]);
 
-	if (!chatId) {
-		return (
-			<div className="p-6 rounded-lg shadow-md">
-				<div className="px-4 py-3 rounded mb-4">Select a chat to join</div>
-			</div>
-		);
-	}
-
 	const handleSendMessage = (text: string, isAnonymous: boolean) => {
 		if (!text.trim()) return;
 
 		const messageData = {
 			text,
-			chat_id: chatId,
+			chat_id: chat!.id,
 			is_anonymous: isAnonymous,
 		};
 
 		socketService.sendMessage(messageData);
-	};
-
-	const handleDisconnect = () => {
-		socketService.disconnect();
 	};
 
 	if (loading) {
@@ -110,20 +105,6 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({ chatId }) => {
 
 	return (
 		<div className="rounded-lg shadow-md flex flex-col h-[80vh]">
-			<div className="p-4 flex justify-between items-center">
-				<div>
-					<h2 className="text-xl font-semibold">{chat?.name || `Chat #${chatId}`}</h2>
-					{chat && <p className="text-sm">Type: {chat.type}</p>}
-				</div>
-				<div className="flex items-center space-x-2">
-					<div className={`h-3 w-3 rounded-full ${connected ? "bg-green-500" : "bg-red-500"}`}></div>
-					<span className="text-sm text-gray-600">{connected ? "Connected" : "Disconnected"}</span>
-					<Button onPress={handleDisconnect} className="ml-4" color="danger">
-						Disconnect
-					</Button>
-				</div>
-			</div>
-
 			<MessageList messages={messages} />
 
 			<div className="p-4 mt-auto">

@@ -1,22 +1,50 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import testMap1 from "@/public/maps/test_map_1.json";
-import testMap2 from "@/public/maps/test_map_2.json";
-import vertConnections from "@/public/maps/all_vertical_connections.json";
+import React, { FC, useEffect, useState } from "react";
 import { Button } from "@heroui/button";
 import { PathForm } from "./PathForm";
 import { DynamicMap, IBuildingGraph, INode, IVerticalConnection, NavigationSystem, Office } from "@/entities/map";
-import { Modal, ModalContent, useDisclosure } from "@heroui/modal";
+import { Modal, ModalContent, ModalBody, ModalHeader, useDisclosure } from "@heroui/modal";
 import { ModalData } from "@/entities/map/ui/Map";
 import { ChatRoom } from "@/entities/chat/ui/ChatRoom";
 
-export const UniversityMap = () => {
-	const [floor, setFloor] = useState<number>(1);
+interface UniversityMapProps {
+	map3: {
+		offices: Office[];
+		nodes: INode[];
+	};
+	map4: {
+		offices: Office[];
+		nodes: INode[];
+	};
+	verticals: IVerticalConnection[];
+	initFloor: Floors;
+}
+
+export type Floors = 1 | 2 | 3 | 4 | 5 | 6 | 7;
+
+export const UniversityMap: FC<UniversityMapProps> = ({ map3, map4, verticals, initFloor }) => {
+	const [floor, setFloor] = useState<Floors>(initFloor);
 	const [mode, setMode] = useState<"2d" | "3d">("2d");
-	const { offices: offices1, nodes: nodes1 } = testMap1 as unknown as { offices: Office[]; nodes: INode[] };
-	const { offices: offices2, nodes: nodes2 } = testMap2 as unknown as { offices: Office[]; nodes: INode[] };
-	const officesMapper = { 1: offices1, 2: offices2 };
-	const nodesMapper = { 1: nodes1, 2: nodes2 };
+	const { offices: offices3, nodes: nodes3 } = map3 as unknown as { offices: Office[]; nodes: INode[] };
+	const { offices: offices4, nodes: nodes4 } = map4 as unknown as { offices: Office[]; nodes: INode[] };
+	const officesMapper: Record<Floors, Office[]> = {
+		1: offices3,
+		2: offices3,
+		3: offices3,
+		4: offices4,
+		5: offices4,
+		6: offices4,
+		7: offices4,
+	};
+	const nodesMapper: Record<Floors, INode[]> = {
+		1: nodes3.map((node) => ({ ...node, floor: 1 })),
+		2: nodes3.map((node) => ({ ...node, floor: 2 })),
+		3: nodes3,
+		4: nodes4,
+		5: nodes4.map((node) => ({ ...node, floor: 5 })),
+		6: nodes4.map((node) => ({ ...node, floor: 6 })),
+		7: nodes4.map((node) => ({ ...node, floor: 7 })),
+	};
 
 	const [instructions, setInstructions] = useState<string[]>();
 	const [path, setPath] = useState<string[]>();
@@ -30,21 +58,12 @@ export const UniversityMap = () => {
 		} else {
 			onClose();
 		}
-	}, [modalData]);
+	}, [modalData, onOpen, onClose]);
 
 	const findPath = async (fromId: string, toId: string) => {
 		const buildingGraph: IBuildingGraph = {
-			floors: [
-				{
-					floor: 1,
-					nodes: nodes1,
-				},
-				{
-					floor: 2,
-					nodes: nodes2,
-				},
-			],
-			verticalConnections: vertConnections as IVerticalConnection[],
+			floors: Object.entries(nodesMapper).map(([floor, nodes]) => ({ floor: Number(floor), nodes })),
+			verticalConnections: verticals,
 		};
 
 		try {
@@ -61,23 +80,26 @@ export const UniversityMap = () => {
 	return (
 		<>
 			<Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-				<ModalContent className="w-[80vw] h-[80vh] p-2">
+				<ModalContent>
 					{() => (
-						<div>
-							<div></div>
-							<ChatRoom chatId={2} />
-						</div>
+						<>
+							<ModalHeader className="flex flex-col gap-1">Чат Аудитории {modalData.office?.name}</ModalHeader>
+
+							<ModalBody>
+								<ChatRoom chatId={modalData.office?.chat?.id} office={modalData.office} />
+							</ModalBody>
+						</>
 					)}
 				</ModalContent>
 			</Modal>
 			<div className="grid grid-cols-[3fr_2fr] max-md:grid-cols-1">
 				<div className="relative h-[80vh] max-md:h-[70vh]">
-					{officesMapper[floor as 1 | 2] && (
+					{officesMapper[floor] && (
 						<DynamicMap
-							offices={officesMapper[floor as 1 | 2]}
+							offices={officesMapper[floor]}
 							mode={mode}
 							path={path}
-							nodes={nodesMapper[floor as 1 | 2]}
+							nodes={nodesMapper[floor]}
 							setModalData={setModalData}
 						/>
 					)}
@@ -87,7 +109,7 @@ export const UniversityMap = () => {
 				</div>
 				<div className="p-2">
 					<div className="flex max-md:grid max-md:grid-cols-4 mb-3 gap-1 items-center justify-evenly">
-						{[1, 2, 3, 4, 5, 6, 7].map((num) => (
+						{([1, 2, 3, 4, 5, 6, 7] as Floors[]).map((num) => (
 							<Button
 								variant={num === floor ? "faded" : "bordered"}
 								className="rounded-full"

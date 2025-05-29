@@ -10,6 +10,7 @@ import { OfficeDrawer } from "./drawers/OfficeDrawer";
 export type ModalData = {
 	isOpen: boolean;
 	office_id: number;
+	office?: Office;
 };
 
 interface Props {

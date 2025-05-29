@@ -18,7 +18,8 @@ import {
 } from "@/shared/constants/tokens";
 
 interface AuthFormProps {
-	type: "login" | "register";
+	type: "login" | "register" | "tg";
+	tg_id?: string;
 }
 
 const getPasswordLevel = (password: string): 0 | 1 | 2 | 3 => {
@@ -36,7 +37,7 @@ const getPasswordLevel = (password: string): 0 | 1 | 2 | 3 => {
 	return 0;
 };
 
-export const AuthForm: FC<AuthFormProps> = ({ type }) => {
+export const AuthForm: FC<AuthFormProps> = ({ type, tg_id }) => {
 	const t = useTranslations();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -57,7 +58,7 @@ export const AuthForm: FC<AuthFormProps> = ({ type }) => {
 
 		try {
 			setIsLoading(true);
-			const res = await $fetch<false>(type === "login" ? `/auth/login` : `/auth/register`, {
+			const res = await $fetch<false>(type === "login" || type === "tg" ? `/auth/login` : `/auth/register`, {
 				method: "POST",
 				data: { email, password },
 			});
@@ -86,10 +87,28 @@ export const AuthForm: FC<AuthFormProps> = ({ type }) => {
 						path: "/",
 					});
 					router.push("/");
+					return;
+				}
+				if (type === "tg") {
+					const tgRes = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN_URL}/telegram-webhook/auth`, {
+						method: "POST",
+						body: JSON.stringify({
+							telegram_id: tg_id,
+							first_name: res.data.first_name,
+							last_name: res.data.last_name,
+							access_token: res.data.access_token,
+							refresh_token: res.data.refresh_token,
+						}),
+					});
+
+					if (tgRes.ok) {
+						router.push("/auth/tg-success");
+					}
+					return;
 				} else {
 					router.push("/register/email");
+					return;
 				}
-				return;
 			} else {
 				addToast({ color: "danger", title: t("exist account") });
 			}

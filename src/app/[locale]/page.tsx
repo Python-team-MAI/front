@@ -1,7 +1,6 @@
 import { Locale, redirect } from "@/entities/i18n/routing";
 import { CardProps, MainCard, SecondaryCard } from "@/entities/main";
 import { TgBanner } from "@/features/TgBanner";
-import { AssistantButton } from "@/widgets/assistant";
 import { Button } from "@heroui/button";
 import { Card, CardHeader } from "@heroui/card";
 import { getTranslations } from "next-intl/server";
@@ -92,7 +91,7 @@ export default async function Home({ params }: { params: Promise<{ locale: Local
 						<Button
 							onPress={async () => {
 								"use server";
-								redirect({ href: "/map", locale });
+								redirect({ href: "/map?floor=2", locale });
 							}}
 							size="lg"
 							variant="shadow"
@@ -153,7 +152,6 @@ export default async function Home({ params }: { params: Promise<{ locale: Local
 					</CardHeader>
 				</Card>
 			</section>
-			<AssistantButton />
 		</main>
 	);
 }

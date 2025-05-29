@@ -16,6 +16,8 @@ export const notAuthRoutes = [
 	"/register/success",
 	"/password/forgot",
 	"/password/change",
+	"/auth/tg-auth",
+	"/auth/tg-success",
 ];
 const notAuthApiRoutes = ["/api/oauth2/finalize"];
 

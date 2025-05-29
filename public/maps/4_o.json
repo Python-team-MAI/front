@@ -1,0 +1,312 @@
+{
+	"offices": [
+		{
+			"desc": "",
+			"type": "elevator",
+			"name": "Ж",
+			"color": "#dddddd",
+			"length": 1,
+			"width": 1,
+			"height": 1,
+			"floor": 4,
+			"coords": [0, 0, 0.9]
+		},
+		{
+			"desc": "",
+			"name": "Коридор",
+			"type": "office",
+			"color": "#dddddd",
+			"length": 1,
+			"width": 1,
+			"height": 18.2,
+			"floor": 4,
+			"coords": [1.1, 0, 0]
+		},
+		{
+			"desc": "",
+			"name": "Лифт",
+			"type": "elevator",
+			"color": "#dddddd",
+			"length": 1,
+			"width": 1,
+			"height": 2,
+			"floor": 4,
+			"coords": [2.2, 0, 1]
+		},
+		{
+			"desc": "",
+			"name": "it-3",
+			"color": "#dddddd",
+			"type": "office",
+			"length": 1,
+			"width": 1,
+			"height": 2,
+			"floor": 4,
+			"coords": [0, 0, 2.5]
+		},
+		{
+			"desc": "",
+			"name": "it-2",
+			"color": "#dddddd",
+			"length": 1,
+			"width": 1,
+			"height": 1,
+			"floor": 4,
+			"type": "office",
+			"coords": [0, 0, 4.2]
+		},
+		{
+			"desc": "",
+			"name": "it-0",
+			"color": "#dddddd",
+			"length": 3,
+			"type": "office",
+			"width": 2,
+			"height": 5,
+			"floor": 4,
+			"coords": [3.2, 0, 5.1]
+		},
+		{
+			"desc": "",
+			"name": "it-1",
+			"color": "#dddddd",
+			"type": "office",
+			"length": 1,
+			"width": 1,
+			"height": 2.2,
+			"floor": 4,
+			"coords": [0, 0, 6]
+		},
+		{
+			"desc": "",
+			"name": "it-7",
+			"type": "stairs",
+			"color": "#dddddd",
+			"length": 1,
+			"width": 1,
+			"height": 4,
+			"floor": 4,
+			"coords": [0, 0, -5]
+		},
+		{
+			"desc": "",
+			"name": "it-8",
+			"color": "#dddddd",
+			"type": "office",
+			"length": 1,
+			"width": 1,
+			"height": 2,
+			"floor": 4,
+			"coords": [2.2, 0, -5.6]
+		},
+		{
+			"desc": "",
+			"name": "it-10",
+			"color": "#dddddd",
+			"type": "office",
+			"length": 1,
+			"width": 1,
+			"height": 2,
+			"floor": 4,
+			"coords": [2.2, 0, -8]
+		},
+		{
+			"desc": "",
+			"name": "it-9",
+			"color": "#dddddd",
+			"length": 1,
+			"type": "office",
+			"width": 1,
+			"height": 2,
+			"floor": 4,
+			"coords": [0, 0, -8.08]
+		},
+		{
+			"desc": "",
+			"name": "Коридор",
+			"color": "#dddddd",
+			"length": 22.2,
+			"type": "office",
+			"width": 1,
+			"height": 1,
+			"floor": 4,
+			"coords": [11.7, 0, -9.6]
+		},
+		{
+			"desc": "",
+			"name": "it-13",
+			"color": "#dddddd",
+			"length": 1,
+			"type": "office",
+			"width": 1,
+			"height": 2,
+			"floor": 4,
+			"coords": [3.25, 0, -11.2]
+		},
+		{
+			"desc": "",
+			"name": "it-17",
+			"color": "#dddddd",
+			"length": 7,
+			"type": "office",
+			"width": 1,
+			"height": 2,
+			"floor": 4,
+			"coords": [12.3, 0, -11.2]
+		},
+		{
+			"desc": "",
+			"name": "it-18",
+			"color": "#dddddd",
+			"length": 7,
+			"width": 1,
+			"type": "office",
+			"height": 2,
+			"floor": 4,
+			"coords": [12.3, 0, -8]
+		},
+		{
+			"desc": "",
+			"name": "it-15",
+			"color": "#dddddd",
+			"length": 4.8,
+			"width": 1,
+			"type": "office",
+			"height": 2,
+			"floor": 4,
+			"coords": [6.3, 0, -11.2]
+		},
+		{
+			"desc": "",
+			"name": "it-16",
+			"type": "office",
+			"color": "#dddddd",
+			"length": 2,
+			"width": 1,
+			"height": 2,
+			"floor": 4,
+			"coords": [6.48, 0, -8]
+		},
+		{
+			"desc": "",
+			"type": "office",
+			"name": "it-14",
+			"color": "#dddddd",
+			"length": 2,
+			"width": 1,
+			"height": 2,
+			"floor": 4,
+			"coords": [4.3, 0, -8]
+		},
+		{
+			"desc": "",
+			"name": "it-19",
+			"color": "#dddddd",
+			"type": "office",
+			"length": 3,
+			"width": 1,
+			"height": 2,
+			"floor": 4,
+			"coords": [18, 0, -11.2]
+		},
+		{
+			"desc": "",
+			"name": "М",
+			"color": "#dddddd",
+			"type": "office",
+			"length": 1,
+			"width": 1,
+			"height": 2,
+			"floor": 4,
+			"coords": [17, 0, -8]
+		},
+		{
+			"desc": "",
+			"name": "Лифт",
+			"type": "elevator",
+			"color": "#dddddd",
+			"length": 2,
+			"width": 1,
+			"height": 2,
+			"floor": 4,
+			"coords": [20.6, 0, -8]
+		},
+		{
+			"desc": "",
+			"name": "it-20",
+			"color": "#dddddd",
+			"type": "office",
+			"length": 3,
+			"width": 1,
+			"height": 2,
+			"floor": 4,
+			"coords": [21.1, 0, -11.2]
+		},
+		{
+			"desc": "",
+			"name": "Лестница",
+			"color": "#dddddd",
+			"type": "stairs",
+			"length": 1,
+			"width": 1,
+			"height": 1,
+			"floor": 4,
+			"coords": [22.2, 0, -8.5]
+		},
+		{
+			"desc": "",
+			"name": "it-12",
+			"type": "office",
+			"color": "#dddddd",
+			"length": 2,
+			"width": 1,
+			"height": 2,
+			"floor": 4,
+			"coords": [1.6, 0, -11.2]
+		},
+		{
+			"desc": "",
+			"name": "it-11",
+			"color": "#dddddd",
+			"type": "office",
+			"length": 1,
+			"width": 1,
+			"height": 1,
+			"floor": 4,
+			"coords": [0, 0, -9.63]
+		},
+		{
+			"desc": "",
+			"name": "it-6",
+			"color": "#dddddd",
+			"length": 1,
+			"width": 1,
+			"type": "office",
+			"height": 2,
+			"floor": 4,
+			"coords": [2.2, 0, -3.4]
+		},
+		{
+			"desc": "",
+			"name": "it-4",
+			"type": "office",
+			"color": "#dddddd",
+			"length": 1,
+			"width": 1,
+			"height": 2,
+			"floor": 4,
+			"coords": [2.2, 0, -1.3]
+		},
+		{
+			"desc": "",
+			"name": "it-5",
+			"color": "#dddddd",
+			"length": 1,
+			"type": "office",
+			"width": 1,
+			"height": 2,
+			"floor": 4,
+			"coords": [0, 0, -1.3]
+		}
+	]
+}

@@ -18,14 +18,14 @@ export const OfficeDrawer: FC<Props> = ({ offices, mode, setModalData }) => {
 
 	return offices.map((office, i) => (
 		<mesh
-			key={JSON.stringify(office.name + i)}
+			key={JSON.stringify(office.id + i)}
 			position={
 				mode === "3d"
 					? [office.coords[0], office.coords[1] + office.width / 2, office.coords[2]]
 					: [office.coords[0], 0, office.coords[2]]
 			}
 			castShadow
-			onClick={() => setModalData({ isOpen: true, office_id: office.id })}
+			onClick={() => setModalData({ isOpen: true, office_id: office.id, office })}
 			onPointerOut={() => setTargetMesh(undefined)}
 			onPointerOver={() => setTargetMesh(i)}
 		>

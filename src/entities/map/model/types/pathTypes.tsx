@@ -1,3 +1,5 @@
+import { ChatRead } from "@/entities/chat/model/types/message";
+
 export interface Office {
 	id: number;
 	length: number;
@@ -6,14 +8,17 @@ export interface Office {
 	coords: [number, number, number];
 	color: string;
 	name: string;
+	floor: number;
 	type?: NodeType;
 	desc: string;
+	chat?: ChatRead;
 }
 
 export type NodeType = "room" | "corridor" | "elevator" | "stairs" | "entrance";
 
 export interface INode {
-	id: string;
+	// id: number;
+	pid_name: string;
 	type: NodeType;
 	x: number;
 	y: number;

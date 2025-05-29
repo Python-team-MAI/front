@@ -27,7 +27,9 @@ export const MessageList: React.FC<MessageListProps> = ({ messages }) => {
 					{messages.map(({ message }) => {
 						return (
 							<div key={message.id} className={`flex justify-end`}>
-								<Card className={`max-w-[70%] min-w-[30%] rounded-lg px-4 py-2 bg-indigo-500 text-white`}>
+								<Card
+									className={`max-w-[70%] min-w-[30%] overflow-x-auto rounded-lg px-4 py-2 bg-indigo-500 text-white`}
+								>
 									{message.is_anonymous ? (
 										<div className="text-xs mb-1 opacity-70">Anonymous</div>
 									) : (

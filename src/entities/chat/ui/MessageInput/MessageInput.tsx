@@ -1,8 +1,7 @@
-// components/MessageInput.tsx
 import { Checkbox } from "@heroui/checkbox";
 import React, { useState } from "react";
 import { TextInput } from "./TextInput";
-import { MdInput } from "./MdInput";
+// import { MdInput } from "./MdInput";
 
 interface MessageInputProps {
 	onSendMessage: (text: string, isAnonymous: boolean) => void;
@@ -11,7 +10,7 @@ interface MessageInputProps {
 export const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
 	const [message, setMessage] = useState("");
 	const [isAnonymous, setIsAnonymous] = useState(false);
-	const [isMd, setIsMd] = useState(false);
+	// const [isMd, setIsMd] = useState(false);
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -27,17 +26,17 @@ export const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => 
 				<Checkbox checked={isAnonymous} onChange={(e) => setIsAnonymous(e.target.checked)} className="mr-2">
 					Send anonymously
 				</Checkbox>
-				<Checkbox checked={isMd} onChange={(e) => setIsMd(e.target.checked)} className="mr-2">
+				{/* <Checkbox checked={isMd} onChange={(e) => setIsMd(e.target.checked)} className="mr-2">
 					Select md text input
-				</Checkbox>
+				</Checkbox> */}
 			</div>
 
 			<div className="flex items-center space-x-2">
-				{!isMd ? (
-					<TextInput message={message} setMessage={setMessage} />
-				) : (
-					<MdInput message={message} setMessage={setMessage} />
-				)}
+				{/* {!isMd ? ( */}
+				<TextInput message={message} setMessage={setMessage} />
+				{/* ) : ( */}
+				{/* <MdInput message={message} setMessage={setMessage} /> */}
+				{/* )} */}
 			</div>
 		</form>
 	);

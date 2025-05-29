@@ -1,0 +1,169 @@
+{
+	"offices": [
+		{
+			"desc": "",
+			"type": "elevator",
+			"name": "Лифт",
+			"color": "#dddddd",
+			"length": 1,
+			"width": 1,
+			"height": 1,
+			"floor": 3,
+			"coords": [0, 0, 0]
+		},
+		{
+			"desc": "",
+			"type": "office",
+			"name": "Коридор",
+			"color": "#dddddd",
+			"length": 1,
+			"width": 1,
+			"height": 18.2,
+			"floor": 3,
+			"coords": [1.1, 0, 0]
+		},
+		{
+			"desc": "",
+			"type": "office",
+			"name": "302",
+			"color": "#dddddd",
+			"length": 1,
+			"width": 1,
+			"height": 2,
+			"floor": 3,
+			"coords": [2.2, 0, 0]
+		},
+		{
+			"desc": "",
+			"type": "office",
+			"name": "303",
+			"color": "#dddddd",
+			"length": 1,
+			"width": 1,
+			"height": 3,
+			"floor": 3,
+			"coords": [0, 0, 2.1]
+		},
+		{
+			"desc": "",
+			"type": "office",
+			"name": "305",
+			"color": "#dddddd",
+			"length": 1,
+			"width": 1,
+			"height": 1,
+			"floor": 3,
+			"coords": [0, 0, 4.2]
+		},
+		{
+			"desc": "",
+			"type": "office",
+			"name": "304",
+			"color": "#dddddd",
+			"length": 3,
+			"width": 2,
+			"height": 6,
+			"floor": 3,
+			"coords": [3.2, 0, 4.1]
+		},
+		{
+			"desc": "",
+			"type": "office",
+			"name": "308",
+			"color": "#dddddd",
+			"length": 1,
+			"width": 1,
+			"height": 2.2,
+			"floor": 3,
+			"coords": [0, 0, 6]
+		},
+		{
+			"desc": "",
+			"name": "307",
+			"type": "stairs",
+			"color": "#dddddd",
+			"length": 2,
+			"width": 1,
+			"height": 6,
+			"floor": 3,
+			"coords": [-0.5, 0, -4]
+		},
+		{
+			"desc": "",
+			"name": "306",
+			"type": "office",
+			"color": "#dddddd",
+			"length": 1,
+			"width": 1,
+			"height": 4,
+			"floor": 3,
+			"coords": [2.2, 0, -4]
+		},
+		{
+			"desc": "",
+			"name": "309",
+			"type": "office",
+			"color": "#dddddd",
+			"length": 1,
+			"width": 1,
+			"height": 2,
+			"floor": 3,
+			"coords": [2.2, 0, -8]
+		},
+		{
+			"desc": "",
+			"name": "310",
+			"type": "office",
+			"color": "#dddddd",
+			"length": 1,
+			"width": 1,
+			"height": 2,
+			"floor": 3,
+			"coords": [0, 0, -8.08]
+		},
+		{
+			"desc": "",
+			"name": "Коридор",
+			"color": "#dddddd",
+			"type": "office",
+			"length": 9.2,
+			"width": 1,
+			"height": 1,
+			"floor": 3,
+			"coords": [5.2, 0, -9.6]
+		},
+		{
+			"desc": "",
+			"name": "311",
+			"type": "office",
+			"color": "#dddddd",
+			"length": 2,
+			"width": 1,
+			"height": 1,
+			"floor": 3,
+			"coords": [1.6, 0, -10.7]
+		},
+		{
+			"desc": "",
+			"name": "312",
+			"color": "#dddddd",
+			"type": "office",
+			"length": 7,
+			"width": 1,
+			"height": 2,
+			"floor": 3,
+			"coords": [6.3, 0, -11.2]
+		},
+		{
+			"desc": "",
+			"name": "313",
+			"color": "#dddddd",
+			"length": 7,
+			"type": "office",
+			"width": 1,
+			"height": 2,
+			"floor": 3,
+			"coords": [6.3, 0, -8]
+		}
+	]
+}

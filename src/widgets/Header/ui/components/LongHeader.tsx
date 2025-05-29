@@ -8,6 +8,7 @@ import { ThemeSwitcher } from "@/widgets/ThemeSwitcher";
 import { LanguageSwitcher } from "@/widgets/LanguageSwitcher";
 import { ProfileButton } from "@/widgets/ProfileButton";
 import { useTranslations } from "next-intl";
+import { LogoutButton } from "@/widgets/Logout";
 
 export const LongHeader = ({}) => {
 	const router = useRouter();
@@ -30,6 +31,9 @@ export const LongHeader = ({}) => {
 					<Link href="/deadlines">{t("deadlines")}</Link>
 				</NavbarItem>
 				<NavbarItem>
+					<Link href="/map?floor=2">{t("map")}</Link>
+				</NavbarItem>
+				<NavbarItem>
 					<Link href="/chat">{t("chat")}</Link>
 				</NavbarItem>
 			</NavbarContent>
@@ -42,6 +46,9 @@ export const LongHeader = ({}) => {
 				</NavbarItem>
 				<NavbarItem>
 					<ProfileButton />
+				</NavbarItem>
+				<NavbarItem>
+					<LogoutButton />
 				</NavbarItem>
 			</NavbarContent>
 		</Navbar>
