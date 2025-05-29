@@ -4,6 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     image: mai-students-frontend
+    cpus: 0.3
     env_file:
       - .env
     ports:
