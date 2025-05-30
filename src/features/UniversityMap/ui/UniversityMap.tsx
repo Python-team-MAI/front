@@ -80,15 +80,15 @@ export const UniversityMap: FC<UniversityMapProps> = ({ map3, map4, verticals, i
 	return (
 		<>
 			<Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-				<ModalContent>
+				<ModalContent className="min-w-[80vw]">
 					{() => (
-						<>
+						<div >
 							<ModalHeader className="flex flex-col gap-1">Чат Аудитории {modalData.office?.name}</ModalHeader>
 
 							<ModalBody>
 								<ChatRoom chatId={modalData.office?.chat?.id} office={modalData.office} />
 							</ModalBody>
-						</>
+						</div>
 					)}
 				</ModalContent>
 			</Modal>

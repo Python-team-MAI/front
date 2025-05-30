@@ -63,7 +63,7 @@ export const OfficeDrawer: FC<Props> = ({ offices, mode, setModalData }) => {
 			<boxGeometry
 				args={mode === "3d" ? [office.length, office.width, office.height] : [office.length, 0, office.height]}
 			/>
-			<meshStandardMaterial color={i == targetMesh ? lightenHexColor(office.color, 70) : office.color} />
+			<meshMatcapMaterial color={i == targetMesh ? lightenHexColor(office.color, 70) : office.color} />
 		</mesh>
 	));
 };

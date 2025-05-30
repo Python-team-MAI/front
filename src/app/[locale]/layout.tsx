@@ -32,12 +32,6 @@ export default async function RootLayout({
 
 	return (
 		<html lang={locale} suppressHydrationWarning>
-			<head>
-				{/* <meta
-					httpEquiv="Content-Security-Policy"
-					content="default-src 'self' http: https: data: 'unsafe-inline' 'unsafe-eval'; connect-src 'self' http: https: ws: wss:; worker-src 'self' blob:;"
-				/> */}
-			</head>
 			<body className={`${roboto.className} antialiased`}>
 				<Providers locale={locale} messages={messages}>
 					<Header />

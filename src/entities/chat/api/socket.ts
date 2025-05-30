@@ -19,7 +19,7 @@ class SocketService {
 					chat_id: chatId,
 				},
 				secure: true,
-				transports: ["websocket"],
+				transports: ["polling"],
 			});
 
 			socketIo.on("connect", () => {
