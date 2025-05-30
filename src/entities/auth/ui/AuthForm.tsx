@@ -90,12 +90,15 @@ export const AuthForm: FC<AuthFormProps> = ({ type, tg_id }) => {
 					return;
 				}
 				if (type === "tg") {
+					const user = await $fetch<false>("/auth/me", {
+						headers: { Authorization: `Bearer ${res.data.access_token}` },
+					});
 					const tgRes = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN_URL}/telegram-webhook/auth`, {
 						method: "POST",
 						body: JSON.stringify({
 							telegram_id: tg_id,
-							first_name: res.data.first_name,
-							last_name: res.data.last_name,
+							first_name: user.data.first_name,
+							last_name: user.data.last_name,
 							access_token: res.data.access_token,
 							refresh_token: res.data.refresh_token,
 						}),

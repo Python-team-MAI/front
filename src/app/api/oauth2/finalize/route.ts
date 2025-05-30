@@ -36,7 +36,6 @@ export async function GET(request: NextRequest) {
 		const cookieStore = await cookies();
 
 		cookieStore.set(ACCESS_TOKEN, access_token, {
-			httpOnly: true,
 			secure: process.env.NODE_ENV === "production",
 			sameSite: "strict",
 			maxAge: ACCESS_TOKEN_EXPIRES_MINUTES * 60 * 1000,
@@ -44,7 +43,6 @@ export async function GET(request: NextRequest) {
 		});
 
 		cookieStore.set(REFRESH_TOKEN, refresh_token, {
-			httpOnly: true,
 			secure: process.env.NODE_ENV === "production",
 			sameSite: "strict",
 			maxAge: REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000,

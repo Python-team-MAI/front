@@ -61,7 +61,6 @@ export async function middleware(request: NextRequest) {
 					const res = NextResponse.redirect(request.url);
 
 					res.cookies.set(ACCESS_TOKEN, data.access_token, {
-						httpOnly: true,
 						secure: process.env.NODE_ENV === "production",
 						sameSite: "strict",
 						maxAge: ACCESS_TOKEN_EXPIRES_MINUTES,
@@ -69,7 +68,6 @@ export async function middleware(request: NextRequest) {
 					});
 
 					res.cookies.set(REFRESH_TOKEN, data.refresh_token, {
-						httpOnly: true,
 						secure: process.env.NODE_ENV === "production",
 						sameSite: "strict",
 						maxAge: REFRESH_TOKEN_EXPIRES_DAYS,
@@ -81,7 +79,6 @@ export async function middleware(request: NextRequest) {
 					});
 					const user = await userRes.json();
 					res.cookies.set(USER, JSON.stringify(user), {
-						httpOnly: true,
 						secure: process.env.NODE_ENV === "production",
 						sameSite: "strict",
 						maxAge: REFRESH_TOKEN_EXPIRES_DAYS,
