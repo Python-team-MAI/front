@@ -16,7 +16,7 @@ export const AssistantButton = () => {
 			</Modal>
 			<div
 				onClick={onOpen}
-				className="absolute flex justify-center items-center right-5 bottom-5 w-16 cursor-pointer h-16 rounded-full bg-blue-400"
+				className="sticky flex justify-center items-center left-5 bottom-5 w-16 cursor-pointer h-16 rounded-full bg-blue-400"
 			>
 				<Bot size={40} />
 			</div>

@@ -50,6 +50,7 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({ chatId, office }) => {
 								id: message.id,
 								text: message.text,
 								user_id: message.user_id,
+								user: message.user,
 								chat_id: message.chat_id,
 								created_at: new Date().toISOString(),
 								updated_at: new Date().toISOString(),

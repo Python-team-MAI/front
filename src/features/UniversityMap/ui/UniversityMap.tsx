@@ -46,7 +46,6 @@ export const UniversityMap: FC<UniversityMapProps> = ({ map3, map4, verticals, i
 		7: nodes4.map((node) => ({ ...node, floor: 7 })),
 	};
 
-	const [instructions, setInstructions] = useState<string[]>();
 	const [path, setPath] = useState<string[]>();
 	const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
@@ -70,8 +69,6 @@ export const UniversityMap: FC<UniversityMapProps> = ({ map3, map4, verticals, i
 			const navSystem = new NavigationSystem(buildingGraph);
 			const path = await navSystem.findPath(fromId, toId);
 			setPath(path);
-			const instructions = navSystem.generateInstructions(path);
-			setInstructions(instructions);
 		} catch (error) {
 			console.error("Ошибка навигации:", error instanceof Error ? error.message : error);
 		}
@@ -122,9 +119,6 @@ export const UniversityMap: FC<UniversityMapProps> = ({ map3, map4, verticals, i
 					</div>
 					<div className="flex flex-col gap-3">
 						<PathForm findPath={findPath} nodeMapper={nodesMapper} />
-						{instructions?.map((instr, i) => (
-							<p key={i}>{instr}</p>
-						))}
 					</div>
 				</div>
 			</div>

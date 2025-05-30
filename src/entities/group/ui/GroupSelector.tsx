@@ -82,6 +82,9 @@ export const GroupSelector: FC<GroupSelectorProps> = ({
 					label={t("institute")}
 					selectedKeys={[regInfo.institute]}
 					onChange={(e) => setRegValue("institute", e.target.value)}
+					classNames={{
+						popoverContent: "z-[9999]",
+					}}
 				>
 					{INSTITUTES.map((institute) => (
 						<SelectItem key={institute}>{institute}</SelectItem>
@@ -93,6 +96,12 @@ export const GroupSelector: FC<GroupSelectorProps> = ({
 					label={t("level")}
 					selectedKeys={[regInfo.level]}
 					onChange={(e) => setRegValue("level", e.target.value)}
+					onOpenChange={() => {
+						document.addEventListener("click", (e) => e.stopPropagation());
+					}}
+					classNames={{
+						popoverContent: "z-[9999]",
+					}}
 				>
 					{currentLevels.map((level) => (
 						<SelectItem key={level}>{level}</SelectItem>

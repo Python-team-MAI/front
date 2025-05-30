@@ -1,3 +1,5 @@
+import { User } from "@/entities/user";
+
 // types.ts
 export interface Chat {
 	name: string;
@@ -32,8 +34,7 @@ export interface MessageRead {
 		text: string;
 		user_id: number;
 		chat_id: number;
-		first_name?: string;
-		last_name?: string;
+		user: User;
 		created_at: string;
 		updated_at: string;
 		is_anonymous: boolean;

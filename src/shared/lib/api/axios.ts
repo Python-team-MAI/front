@@ -28,7 +28,7 @@ export const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use((config) => {
 	const accessToken = document.cookie
 		.split("; ")
-		.find((row) => row.startsWith("accessToken="))
+		.find((row) => row.startsWith("access_token="))
 		?.split("=")[1];
 
 	if (accessToken) {
@@ -58,18 +58,24 @@ axiosInstance.interceptors.response.use(
 			isRefreshing = true;
 
 			try {
-				const { data } = await axios.post(process.env.NEXT_PUBLIC_API_URL + "/auth/refresh");
+				const { data } = await axios.post(
+					process.env.NEXT_PUBLIC_API_URL + "/v1/auth/refresh",
+					{},
+					{
+						withCredentials: true,
+					}
+				);
 
-				document.cookie = `accessToken=${data.accessToken}; path=/; secure`;
-				document.cookie = `refreshToken=${data.refreshToken}; path=/; secure`;
+				document.cookie = `access_token=${data.access_token}; path=/; secure`;
+				document.cookie = `refresh_token=${data.refresh_token}; path=/; secure`;
 
-				originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+				originalRequest.headers.Authorization = `Bearer ${data.access_token}`;
 
-				processQueue(null, data.accessToken);
+				processQueue(null, data.access_token);
 				return axiosInstance(originalRequest);
 			} catch (refreshError) {
-				document.cookie = "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-				document.cookie = "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+				document.cookie = "access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+				document.cookie = "refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 				window.location.href = "/ru/login";
 				processQueue(refreshError as string, undefined);
 				return Promise.reject(refreshError);

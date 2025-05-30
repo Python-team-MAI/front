@@ -18,6 +18,8 @@ export const MessageList: React.FC<MessageListProps> = ({ messages }) => {
 		return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 	};
 
+	console.log(messages);
+
 	return (
 		<div className="flex-1 p-4 overflow-y-auto">
 			{messages.length === 0 ? (
@@ -34,7 +36,7 @@ export const MessageList: React.FC<MessageListProps> = ({ messages }) => {
 										<div className="text-xs mb-1 opacity-70">Anonymous</div>
 									) : (
 										<div className="text-xs mb-1 opacity-70">
-											{message.first_name} {message.first_name}
+											{message?.user?.first_name} {message?.user?.first_name}
 										</div>
 									)}
 									<div>{message.text}</div>

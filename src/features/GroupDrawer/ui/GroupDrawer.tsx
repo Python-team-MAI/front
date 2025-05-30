@@ -50,7 +50,13 @@ export const GroupDrawer: FC<GroupDrawerProps> = ({ currentGroup: initialGroup, 
 				<p className="text-sm">{t("group")}</p>
 				<p className="text-lg">{currentGroup}</p>
 			</div>
-			<Drawer ref={ref} placement="left" isOpen={isOpen} onOpenChange={(isOpen) => setIsOpen(isOpen)}>
+			<Drawer
+				ref={ref}
+				placement="left"
+				isOpen={isOpen}
+				isDismissable={false}
+				onOpenChange={(isOpen) => setIsOpen(isOpen)}
+			>
 				<GroupSelector setValue={onGroupChange} groups={groups} GroupsWrapper={GroupsWrapper} Wrapper={Wrapper} />
 			</Drawer>
 		</>

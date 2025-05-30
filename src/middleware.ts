@@ -39,7 +39,9 @@ export async function middleware(request: NextRequest) {
 
 	if (getNotAuthRoutes(locale).includes(pathname)) {
 		if (accessToken) {
-			return NextResponse.next();
+			const url = request.nextUrl.clone();
+			url.pathname = `/${locale}`;
+			return NextResponse.redirect(url);
 		}
 		return NextResponse.next();
 	}
