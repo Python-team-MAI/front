@@ -16,6 +16,7 @@ import {
 	REFRESH_TOKEN_EXPIRES_DAYS,
 	USER,
 } from "@/shared/constants/tokens";
+import axios from "axios";
 
 interface AuthFormProps {
 	type: "login" | "register" | "tg";
@@ -90,21 +91,44 @@ export const AuthForm: FC<AuthFormProps> = ({ type, tg_id }) => {
 					return;
 				}
 				if (type === "tg") {
+					CookieManager.set(ACCESS_TOKEN, res.data.access_token, {
+						secure: process.env.NODE_ENV === "production",
+						sameSite: "Strict",
+						expires: new Date(Date.now() + ACCESS_TOKEN_EXPIRES_MINUTES * 60 * 1000),
+						path: "/",
+					});
+					CookieManager.set(REFRESH_TOKEN, res.data.refresh_token, {
+						secure: process.env.NODE_ENV === "production",
+						sameSite: "Strict",
+						expires: new Date(Date.now() + REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000),
+						path: "/",
+					});
 					const user = await $fetch<false>("/auth/me", {
 						headers: { Authorization: `Bearer ${res.data.access_token}` },
 					});
-					const tgRes = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN_URL}/telegram-webhook/auth`, {
+					CookieManager.set(USER, JSON.stringify(user.data), {
+						secure: process.env.NODE_ENV === "production",
+						sameSite: "Strict",
+						expires: new Date(Date.now() + REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000),
+						path: "/",
+					});
+					const tgRes = await axios(`${process.env.NEXT_PUBLIC_DOMAIN_URL}/telegram-webhook/auth`, {
 						method: "POST",
-						body: JSON.stringify({
+						headers: {
+							Authorization: `Bearer ${res.data.access_token}`,
+							"Content-Type": "application/json",
+						},
+						withCredentials: true,
+						data: {
 							telegram_id: tg_id,
 							first_name: user.data.first_name,
 							last_name: user.data.last_name,
 							access_token: res.data.access_token,
 							refresh_token: res.data.refresh_token,
-						}),
+						},
 					});
 
-					if (tgRes.ok) {
+					if (tgRes.status >= 200 && tgRes.status < 300) {
 						router.push("/auth/tg-success");
 					}
 					return;
@@ -177,7 +201,7 @@ export const AuthForm: FC<AuthFormProps> = ({ type, tg_id }) => {
 				type="submit"
 				isDisabled={type === "register" && passwordLevel < 2}
 			>
-				{t(type === "login" ? "sign in" : "sign up")}
+				{t(type === "register" ? "sign up" : "sign in")}
 			</Button>
 			{type === "login" && <Link href="/password/forgot">Забыли пароль?</Link>}
 		</form>

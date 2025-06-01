@@ -16,7 +16,7 @@ export function Providers({
 }) {
 	return (
 		<NextIntlClientProvider timeZone="Europe/Moscow" locale={locale} messages={messages}>
-			<HeroUIProvider>
+			<HeroUIProvider className="min-h-[100vh]">
 				<ThemeProvider defaultTheme="dark" attribute="data-theme" disableTransitionOnChange>
 					<ToastProvider />
 					{children}

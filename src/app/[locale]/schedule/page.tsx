@@ -48,8 +48,10 @@ const SchedulePageServer = async ({
 	const { start, end } = getWeekRange(currentDate.format("DD.MM.YYYY"));
 
 	const accessToken = cookieStore.get(ACCESS_TOKEN);
-	const res = await $fetch("/deadlines", { headers: { Authorization: `Bearer ${accessToken}` } });
+	const res = (await $fetch("/deadlines/me", { headers: { Authorization: `Bearer ${accessToken}` } })) || [];
 	const deadlines: Deadline[] = (await res.json()) || [];
+
+	console.log(deadlines);
 
 	if (!schedule) {
 		return <div>Расписание не найдено</div>;
@@ -66,11 +68,14 @@ const SchedulePageServer = async ({
 				<WeekDrawer end={end} start={start} times={times} />
 			</div>
 			<ScheduleClient
-				deadlines={deadlines.map(({ date_to, date_from, ...other }) => ({
-					...other,
-					date_to: moment(date_to).add(3, "hours").toISOString(),
-					date_from: date_from ? moment(date_from).add(3, "hours").toISOString() : undefined,
-				}))}
+				deadlines={
+					// []
+					deadlines.map(({ date_to, date_from, ...other }) => ({
+						...other,
+						date_to: moment(date_to).add(3, "hours").toISOString(),
+						date_from: date_from ? moment(date_from).add(3, "hours").toISOString() : undefined,
+					}))
+				}
 				schedule={schedule}
 				groupName={groupName}
 				date={date}

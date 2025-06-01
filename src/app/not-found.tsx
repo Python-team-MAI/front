@@ -16,13 +16,7 @@ const NotFound = () => {
 				<Providers locale={routing.defaultLocale} messages={messages}>
 					<Navbar shouldHideOnScroll>
 						<NavbarBrand className="cursor-pointer">
-							<Image
-								width={70}
-								height={70}
-								className="max-md:hidden"
-								src={"/logo/light_logo.png"}
-								alt="logo"
-							/>
+							<Image width={70} height={70} className="max-md:hidden" src={"/logo/light_logo.png"} alt="logo" />
 							<p className="font-bold text-inherit">МАИ (Студенты)</p>
 						</NavbarBrand>
 						<NavbarContent justify="end"></NavbarContent>
@@ -42,16 +36,6 @@ const NotFound = () => {
 									}}
 								>
 									На главную
-								</Button>
-								<Button
-									size="lg"
-									fullWidth
-									onPress={async () => {
-										"use server";
-										redirect({ href: "/support", locale: "en" });
-									}}
-								>
-									Техподдержка
 								</Button>
 							</div>
 						</div>

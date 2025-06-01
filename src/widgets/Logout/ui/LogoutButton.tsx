@@ -4,6 +4,7 @@ import { useRouter } from "@/navigation";
 import { ACCESS_TOKEN, REFRESH_TOKEN, USER } from "@/shared/constants/tokens";
 import { CookieManager } from "@/shared/lib/utils/cookie/cookie";
 import { Button } from "@heroui/button";
+import { LogOut } from "lucide-react";
 import React from "react";
 
 export const LogoutButton = () => {
@@ -19,7 +20,7 @@ export const LogoutButton = () => {
 
 	return (
 		<Button size="sm" onPress={logout}>
-			Выйти
+			<LogOut />
 		</Button>
 	);
 };

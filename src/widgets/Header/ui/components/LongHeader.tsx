@@ -9,48 +9,72 @@ import { LanguageSwitcher } from "@/widgets/LanguageSwitcher";
 import { ProfileButton } from "@/widgets/ProfileButton";
 import { useTranslations } from "next-intl";
 import { LogoutButton } from "@/widgets/Logout";
+import { Drawer, DrawerBody, DrawerContent } from "@heroui/drawer";
+import { ChartNoAxesGantt, Home, Map, Menu, MessageSquare, Table } from "lucide-react";
+import { useState } from "react";
+import { TgBanner } from "@/features/TgBanner";
 
 export const LongHeader = ({}) => {
 	const router = useRouter();
 	const t = useTranslations();
+	const [isOpen, setIsOpen] = useState(false);
 
 	return (
-		<Navbar shouldHideOnScroll>
-			<NavbarBrand onClick={() => router.push("/")} className="cursor-pointer">
-				<Image width={70} height={70} className="max-md:hidden" src={"/logo/light_logo.png"} alt="logo" />
-				<p className="font-bold text-inherit">{t("logo title")}</p>
-			</NavbarBrand>
-			<NavbarContent className="hidden sm:flex gap-4" justify="center">
-				<NavbarItem>
-					<Link href="/">{t("main")}</Link>
-				</NavbarItem>
-				<NavbarItem>
-					<Link href={`/schedule?date=${moment().format("DD.MM.YYYY")}&group=М8О-101БВ-24`}>{t("schedule")}</Link>
-				</NavbarItem>
-				<NavbarItem>
-					<Link href="/deadlines">{t("deadlines")}</Link>
-				</NavbarItem>
-				<NavbarItem>
-					<Link href="/map?floor=2">{t("map")}</Link>
-				</NavbarItem>
-				<NavbarItem>
-					<Link href="/chat">{t("chat")}</Link>
-				</NavbarItem>
-			</NavbarContent>
-			<NavbarContent justify="end">
-				<NavbarItem>
-					<ThemeSwitcher />
-				</NavbarItem>
-				<NavbarItem>
-					<LanguageSwitcher />
-				</NavbarItem>
-				<NavbarItem>
-					<ProfileButton />
-				</NavbarItem>
-				<NavbarItem>
-					<LogoutButton />
-				</NavbarItem>
-			</NavbarContent>
-		</Navbar>
+		<>
+			<Drawer isOpen={isOpen} onOpenChange={(isOpen) => setIsOpen(isOpen)}>
+				<DrawerContent>
+					<DrawerBody className="py-10">
+						<Link onClick={() => setIsOpen(false)} href="/" className="flex gap-2 items-centers">
+							<Home size={24} className="flex justify-center items-center" />
+							<p className="text-xl">{t("main")}</p>
+						</Link>
+						<Link
+							onClick={() => setIsOpen(false)}
+							href={`/schedule?date=${moment().format("DD.MM.YYYY")}&group=М8О-101БВ-24`}
+							className="flex gap-2 items-centers"
+						>
+							<Table size={24} className="flex justify-center items-center" />
+							<p className="text-xl">{t("schedule")}</p>
+						</Link>
+						<Link onClick={() => setIsOpen(false)} href="/deadlines" className="flex gap-2 items-centers">
+							<ChartNoAxesGantt size={24} className="flex justify-center items-center" />
+							<p className="text-xl">{t("deadlines")}</p>
+						</Link>
+						<Link onClick={() => setIsOpen(false)} href="/map?floor=2" className="flex gap-2 items-centers">
+							<Map size={24} className="flex justify-center items-center" />
+							<p className="text-xl">{t("map")}</p>
+						</Link>
+						<Link onClick={() => setIsOpen(false)} href="/chat" className="flex gap-2 items-centers">
+							<MessageSquare size={24} className="flex justify-center items-center" />
+							<p className="text-xl">{t("chat")}</p>
+						</Link>
+						<TgBanner />
+					</DrawerBody>
+				</DrawerContent>
+			</Drawer>
+			<Navbar shouldHideOnScroll>
+				<NavbarBrand onClick={() => router.push("/")} className="cursor-pointer">
+					<Image width={70} height={70} className="max-md:hidden" src={"/logo/light_logo.png"} alt="logo" />
+					<p className="font-bold text-inherit">{t("logo title")}</p>
+				</NavbarBrand>
+				<NavbarContent justify="end" className="flex gap-2">
+					<NavbarItem>
+						<ThemeSwitcher />
+					</NavbarItem>
+					<NavbarItem>
+						<LanguageSwitcher />
+					</NavbarItem>
+					<NavbarItem>
+						<ProfileButton />
+					</NavbarItem>
+					<NavbarItem className="cursor-pointer" onClick={() => setIsOpen(true)}>
+						<Menu />
+					</NavbarItem>
+					<NavbarItem>
+						<LogoutButton />
+					</NavbarItem>
+				</NavbarContent>
+			</Navbar>
+		</>
 	);
 };

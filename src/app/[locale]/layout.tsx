@@ -28,16 +28,17 @@ export default async function RootLayout({
 		notFound();
 	}
 
-	const messages = await getMessages();
+	const messages = await getMessages({ locale });
+	console.log(messages);
 
 	return (
 		<html lang={locale} suppressHydrationWarning>
 			<body className={`${roboto.className} antialiased`}>
 				<Providers locale={locale} messages={messages}>
 					<Header />
-					<div className="px-[10vw] max-md:px-2">{children}</div>
+					<main className="px-[10vw] max-md:px-2">{children}</main>
+					<AssistantButton />
 				</Providers>
-				<AssistantButton />
 			</body>
 		</html>
 	);

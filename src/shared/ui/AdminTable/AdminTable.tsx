@@ -11,9 +11,9 @@ import {
 	ModalFooter,
 	useDisclosure,
 	Spinner,
-	Select,
-	SelectItem,
+	Checkbox,
 } from "@heroui/react";
+import { Select, SelectItem } from "@heroui/select";
 import { axiosInstance } from "@/shared/lib/api/axios";
 import { useTheme } from "next-themes";
 
@@ -145,7 +145,7 @@ export function AdminTable({ title, endpoint, columns, createFields, updateField
 			case "boolean":
 				return (
 					<label key={field.key} className="flex items-center space-x-2">
-						<input
+						<Checkbox
 							type="checkbox"
 							checked={!!formData[field.key] || false}
 							onChange={(e) => setFormData({ ...formData, [field.key]: e.target.checked })}
@@ -157,16 +157,15 @@ export function AdminTable({ title, endpoint, columns, createFields, updateField
 			case "select":
 				return (
 					<div key={field.key}>
-						<label className="block text-sm font-medium mb-1">{field.label}</label>
 						<Select
+							label="Роль"
 							value={(formData[field.key] as string) || ""}
 							onChange={(e) => setFormData({ ...formData, [field.key]: e.target.value })}
-							className="w-full p-2 border rounded"
+							className="w-full"
 						>
-							<SelectItem key="">Выберите...</SelectItem>
-							{field.options
-								? field.options.map((option) => <SelectItem key={option.value}>{option.label}</SelectItem>)
-								: null}
+							{field.options!.map((option) => (
+								<SelectItem key={option.value}>{option.label}</SelectItem>
+							))}
 						</Select>
 					</div>
 				);
