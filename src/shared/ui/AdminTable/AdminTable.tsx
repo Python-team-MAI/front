@@ -210,7 +210,7 @@ export function AdminTable({ title, endpoint, columns, createFields, updateField
 	}
 
 	return (
-		<div className={theme === "dark" ? "dark" : "light"}>
+		<div className={(theme === "dark" ? "dark" : "light") + " max-w-[70vw]"}>
 			<div className="flex justify-between items-center mb-6">
 				<h1 className="text-2xl font-bold text-gray-800 dark:text-white">{title}</h1>
 				{createFields && (

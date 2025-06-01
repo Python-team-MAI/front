@@ -3,12 +3,23 @@ import { AuthForm } from "@/entities/auth";
 import { GithubOAuthButton, GoogleOAuthButton, YandexOAuthButton } from "@/widgets/AuthButtons";
 import { Link as NextUILink } from "@heroui/link";
 import { getTranslations } from "next-intl/server";
+import { cookies } from "next/headers";
+import { ACCESS_TOKEN } from "@/shared/constants/tokens";
+import { redirect } from "@/navigation";
 
 export default async function SignInPage(props: {
 	searchParams: Promise<{ callbackUrl: string | undefined }>;
 	params: Promise<{ locale: Locale }>;
 }) {
+	const cookieManager = await cookies();
+	const accessToken = cookieManager.get(ACCESS_TOKEN);
 	const { locale } = await props.params;
+
+	if (accessToken) {
+		redirect({ locale, href: "/" });
+		return;
+	}
+
 	const t = await getTranslations({ locale });
 
 	return (

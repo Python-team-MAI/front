@@ -18,10 +18,16 @@ const MapPage = async (props: { searchParams: Promise<{ floor: string }>; params
 	const cookieStore = await cookies();
 	const accessToken = cookieStore.get(ACCESS_TOKEN);
 
-	const res3 = await $fetch("/offices/map/floor/" + 3, { headers: { Authorization: `Bearer ${accessToken}` } });
+	const res3 = await $fetch("/offices/map/floor/" + 3, {
+		headers: { Authorization: `Bearer ${accessToken}` },
+		next: { revalidate: 7257600 },
+	});
 	const map3 = (await res3.json()) as { offices: Office[]; nodes: INode[] };
 
-	const res4 = await $fetch("/offices/map/floor/" + 4, { headers: { Authorization: `Bearer ${accessToken}` } });
+	const res4 = await $fetch("/offices/map/floor/" + 4, {
+		headers: { Authorization: `Bearer ${accessToken}` },
+		next: { revalidate: 7257600 },
+	});
 	const map4 = (await res4.json()) as { offices: Office[]; nodes: INode[] };
 
 	const verticalsRes = await fetch(`${process.env.NEXT_PUBLIC_STATIC_URL}/all_vertical_connections.json`);

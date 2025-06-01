@@ -16,6 +16,7 @@ export const LogoutButton = () => {
 		CookieManager.remove(REFRESH_TOKEN);
 
 		router.push("/login");
+		router.refresh();
 	};
 
 	return (

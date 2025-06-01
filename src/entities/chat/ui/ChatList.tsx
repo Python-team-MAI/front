@@ -48,7 +48,7 @@ export const ChatList: React.FC<ChatListProps> = ({ selectedChatId, onSelectChat
 	}, [debouncesSearch, chats]);
 
 	return (
-		<div className="p-4 rounded-lg shadow-md h-full">
+		<div className="p-4 rounded-lg shadow-md h-full ">
 			<h2 className="text-xl font-semibold mb-4">Chats</h2>
 
 			{loading && <div className="text-center py-4">Loading chats...</div>}
@@ -57,7 +57,7 @@ export const ChatList: React.FC<ChatListProps> = ({ selectedChatId, onSelectChat
 
 			{!loading && chats.length === 0 && <div className="text-center py-4">No chats found</div>}
 
-			<ul className="space-y-2">
+			<ul className="space-y-2 max-h-[70vh] overflow-auto">
 				<Input label="Найдите свою аудиторию" value={search} onChange={(e) => setSearch(e.target.value)} />
 				{searchChats.map((chat) => (
 					<li key={chat.id}>

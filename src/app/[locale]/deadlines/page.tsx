@@ -8,8 +8,18 @@ import moment from "moment";
 export default async function DeadlinesPage() {
 	const cookieStore = await cookies();
 	const accessToken = cookieStore.get(ACCESS_TOKEN);
-	const res = await $fetch("/deadlines", { headers: { Authorization: `Bearer ${accessToken}` } });
-	const deadlines: Deadline[] = (await res.json()) || [];
+	let deadlines: Deadline[] = [];
+
+	try {
+		const res = await $fetch("/deadlines/me", { headers: { Authorization: `Bearer ${accessToken?.value}` } });
+		if (!res.ok) {
+			throw new Error(JSON.stringify(await res.text()) + res.status);
+		}
+		deadlines = (await res.json()) || [];
+	} catch (e) {
+		console.log(e);
+		deadlines = [];
+	}
 
 	return (
 		<DeadlinePageContent

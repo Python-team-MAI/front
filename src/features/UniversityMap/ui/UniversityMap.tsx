@@ -6,6 +6,7 @@ import { DynamicMap, IBuildingGraph, INode, IVerticalConnection, NavigationSyste
 import { Modal, ModalContent, ModalBody, ModalHeader, useDisclosure } from "@heroui/modal";
 import { ModalData } from "@/entities/map/ui/Map";
 import { ChatRoom } from "@/entities/chat/ui/ChatRoom";
+import { useRouter } from "@/navigation";
 
 interface UniversityMapProps {
 	map3: {
@@ -23,7 +24,7 @@ interface UniversityMapProps {
 export type Floors = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 export const UniversityMap: FC<UniversityMapProps> = ({ map3, map4, verticals, initFloor }) => {
-	const [floor, setFloor] = useState<Floors>(initFloor);
+	const router = useRouter();
 	const [mode, setMode] = useState<"2d" | "3d">("2d");
 	const { offices: offices3, nodes: nodes3 } = map3 as unknown as { offices: Office[]; nodes: INode[] };
 	const { offices: offices4, nodes: nodes4 } = map4 as unknown as { offices: Office[]; nodes: INode[] };
@@ -68,6 +69,7 @@ export const UniversityMap: FC<UniversityMapProps> = ({ map3, map4, verticals, i
 		try {
 			const navSystem = new NavigationSystem(buildingGraph);
 			const path = await navSystem.findPath(fromId, toId);
+			console.log(path);
 			setPath(path);
 		} catch (error) {
 			console.error("Ошибка навигации:", error instanceof Error ? error.message : error);
@@ -79,7 +81,7 @@ export const UniversityMap: FC<UniversityMapProps> = ({ map3, map4, verticals, i
 			<Modal isOpen={isOpen} onOpenChange={onOpenChange}>
 				<ModalContent className="min-w-[80vw]">
 					{() => (
-						<div >
+						<div>
 							<ModalHeader className="flex flex-col gap-1">Чат Аудитории {modalData.office?.name}</ModalHeader>
 
 							<ModalBody>
@@ -91,12 +93,12 @@ export const UniversityMap: FC<UniversityMapProps> = ({ map3, map4, verticals, i
 			</Modal>
 			<div className="grid grid-cols-[3fr_2fr] max-md:grid-cols-1">
 				<div className="relative h-[80vh] max-md:h-[70vh]">
-					{officesMapper[floor] && (
+					{officesMapper[initFloor] && (
 						<DynamicMap
-							offices={officesMapper[floor]}
+							offices={officesMapper[initFloor]}
 							mode={mode}
 							path={path}
-							nodes={nodesMapper[floor]}
+							nodes={nodesMapper[initFloor]}
 							setModalData={setModalData}
 						/>
 					)}
@@ -108,17 +110,17 @@ export const UniversityMap: FC<UniversityMapProps> = ({ map3, map4, verticals, i
 					<div className="flex max-md:grid max-md:grid-cols-4 mb-3 gap-1 items-center justify-evenly">
 						{([1, 2, 3, 4, 5, 6, 7] as Floors[]).map((num) => (
 							<Button
-								variant={num === floor ? "faded" : "bordered"}
+								variant={num === initFloor ? "faded" : "bordered"}
 								className="rounded-full"
 								key={num}
-								onPress={() => setFloor(num)}
+								onPress={() => router.push("/map?floor=" + num)}
 							>
 								{num}
 							</Button>
 						))}
 					</div>
 					<div className="flex flex-col gap-3">
-						<PathForm findPath={findPath} nodeMapper={nodesMapper} />
+						<PathForm floor={initFloor} findPath={findPath} nodeMapper={nodesMapper} />
 					</div>
 				</div>
 			</div>

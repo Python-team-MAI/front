@@ -46,8 +46,8 @@ export async function middleware(request: NextRequest) {
 		return NextResponse.next();
 	}
 
-	if (!accessToken) {
-		if (refreshToken) {
+	if (!accessToken || accessToken === "") {
+		if (refreshToken && refreshToken !== "") {
 			try {
 				const response = await $fetch(`/auth/refresh`, {
 					method: "POST",

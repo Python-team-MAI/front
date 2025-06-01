@@ -8,25 +8,25 @@ const mainCards: CardProps[] = [
 		src: "/icons/safe.svg",
 		alt: "safe",
 		text: "payment",
-		href: "",
+		href: "https://pay.mai.ru",
 	},
 	{
 		src: "/icons/laptop.svg",
 		alt: "laptop",
 		text: "lms",
-		href: "",
+		href: "https://lms.mai.ru",
 	},
 	{
 		src: "/icons/notepad.svg",
 		alt: "notepad",
 		text: "admission",
-		href: "",
+		href: "https://priem.mai.ru/",
 	},
 	{
 		src: "/icons/student.svg",
 		alt: "student",
 		text: "account",
-		href: "",
+		href: "https://my.mai.ru",
 	},
 ];
 
@@ -35,25 +35,25 @@ const secondaryCards: CardProps[] = [
 		src: "/icons/teacher.svg",
 		alt: "teacher",
 		text: "teachers",
-		href: "",
+		href: "https://mai.ru/sveden/employees",
 	},
 	{
 		src: "/icons/burger_king.svg",
 		alt: "burger_king",
 		text: "food",
-		href: "",
+		href: "https://mai.ru/campus/locations/cafeteria",
 	},
 	{
 		src: "/icons/sport.svg",
 		alt: "sport",
 		text: "sport",
-		href: "",
+		href: "https://mai.ru/campus/locations/sport",
 	},
 	{
 		src: "/icons/news.svg",
 		alt: "news",
 		text: "news",
-		href: "",
+		href: "https://mai.ru/press/news",
 	},
 ];
 
@@ -70,20 +70,20 @@ const bigCards = [
 		alt: "tree",
 		text: "recreation",
 		secondaryText: "health edu centers",
-		href: "",
+		href: "https://mai.ru/campus/locations/recreation",
 	},
 	{
 		src: "/icons/room.svg",
 		alt: "room",
 		text: "uni campus",
 		secondaryText: "dormitories",
-		href: "",
+		href: "https://mai.ru/campus/locations/dormitory",
 	},
 ];
 
 export default async function Home({ params }: { params: Promise<{ locale: Locale }> }) {
 	const { locale } = await params;
-	const t = await getTranslations();
+	const t = await getTranslations({ locale });
 	const randomNumber = Math.random();
 
 	return (

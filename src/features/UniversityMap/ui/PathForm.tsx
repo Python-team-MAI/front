@@ -4,17 +4,19 @@ import { useTranslations } from "next-intl";
 import { Select, SelectItem } from "@heroui/select";
 import { Button } from "@heroui/button";
 import { INode } from "@/entities/map";
+import { Floors } from "./UniversityMap";
 
 interface Props {
 	nodeMapper: Record<1 | 2, INode[]>;
 	findPath: (fromId: string, toId: string) => void;
+	floor: Floors;
 }
 
-export const PathForm: FC<Props> = ({ nodeMapper, findPath }) => {
+export const PathForm: FC<Props> = ({ nodeMapper, findPath, floor }) => {
 	const [from, setFrom] = useState<string>();
 	const [to, setTo] = useState<string>();
-	const [fromFloor, setFromFloor] = useState<number>(1);
-	const [toFloor, setToFloor] = useState<number>(1);
+	const [fromFloor, setFromFloor] = useState<number>(floor);
+	const [toFloor, setToFloor] = useState<number>(floor);
 	const t = useTranslations();
 
 	const nodes1 = nodeMapper[fromFloor as 1 | 2];
@@ -41,10 +43,10 @@ export const PathForm: FC<Props> = ({ nodeMapper, findPath }) => {
 					{nonCoridorGeoNames1.map((name) => (
 						<SelectItem key={name}>{name}</SelectItem>
 					))}
-				</Select>{" "}
+				</Select>
 				<Select selectedKeys={[String(fromFloor)]} onChange={(e) => setFromFloor(Number(e.target.value))}>
-					{[1, 2, 3, 4, 5, 6, 7].map((num, i) => (
-						<SelectItem key={i}>{String(num)}</SelectItem>
+					{[1, 2, 3, 4, 5, 6, 7].map((num) => (
+						<SelectItem key={String(num)}>{String(num)}</SelectItem>
 					))}
 				</Select>
 			</div>

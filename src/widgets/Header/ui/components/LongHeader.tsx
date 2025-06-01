@@ -10,14 +10,20 @@ import { ProfileButton } from "@/widgets/ProfileButton";
 import { useTranslations } from "next-intl";
 import { LogoutButton } from "@/widgets/Logout";
 import { Drawer, DrawerBody, DrawerContent } from "@heroui/drawer";
-import { ChartNoAxesGantt, Home, Map, Menu, MessageSquare, Table } from "lucide-react";
+import { ChartNoAxesGantt, Home, Lock, Map, Menu, MessageSquare, Table } from "lucide-react";
 import { useState } from "react";
 import { TgBanner } from "@/features/TgBanner";
+import { jwtDecode } from "jwt-decode";
+import { CookieManager } from "@/shared/lib/utils/cookie/cookie";
+import { ACCESS_TOKEN } from "@/shared/constants/tokens";
+import { User } from "@/entities/user";
 
 export const LongHeader = ({}) => {
 	const router = useRouter();
 	const t = useTranslations();
 	const [isOpen, setIsOpen] = useState(false);
+	const accessToken = CookieManager.get(ACCESS_TOKEN);
+	const decoded = jwtDecode<User>(accessToken!);
 
 	return (
 		<>
@@ -40,7 +46,7 @@ export const LongHeader = ({}) => {
 							<ChartNoAxesGantt size={24} className="flex justify-center items-center" />
 							<p className="text-xl">{t("deadlines")}</p>
 						</Link>
-						<Link onClick={() => setIsOpen(false)} href="/map?floor=2" className="flex gap-2 items-centers">
+						<Link onClick={() => setIsOpen(false)} href="/map?floor=4" className="flex gap-2 items-centers">
 							<Map size={24} className="flex justify-center items-center" />
 							<p className="text-xl">{t("map")}</p>
 						</Link>
@@ -48,6 +54,12 @@ export const LongHeader = ({}) => {
 							<MessageSquare size={24} className="flex justify-center items-center" />
 							<p className="text-xl">{t("chat")}</p>
 						</Link>
+						{decoded.role === "admin" && (
+							<Link onClick={() => setIsOpen(false)} href="/admin" className="flex gap-2 items-centers">
+								<Lock size={24} className="flex justify-center items-center" />
+								<p className="text-xl">{t("admin")}</p>
+							</Link>
+						)}
 						<TgBanner />
 					</DrawerBody>
 				</DrawerContent>

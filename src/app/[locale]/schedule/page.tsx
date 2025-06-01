@@ -48,11 +48,18 @@ const SchedulePageServer = async ({
 	const { start, end } = getWeekRange(currentDate.format("DD.MM.YYYY"));
 
 	const accessToken = cookieStore.get(ACCESS_TOKEN);
-	const res = (await $fetch("/deadlines/me", { headers: { Authorization: `Bearer ${accessToken}` } })) || [];
-	const deadlines: Deadline[] = (await res.json()) || [];
 
-	console.log(deadlines);
+	let deadlines: Deadline[] = [];
 
+	try {
+		const res = await $fetch("/deadlines/me", { headers: { Authorization: `Bearer ${accessToken?.value}` } });
+		if (!res.ok) {
+			throw new Error("Deadlines Error");
+		}
+		deadlines = (await res.json()) || [];
+	} catch {
+		deadlines = [];
+	}
 	if (!schedule) {
 		return <div>Расписание не найдено</div>;
 	}
