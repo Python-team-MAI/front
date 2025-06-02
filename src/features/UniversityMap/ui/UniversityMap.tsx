@@ -113,6 +113,7 @@ export const UniversityMap: FC<UniversityMapProps> = ({ map3, map4, verticals, i
 								variant={num === initFloor ? "faded" : "bordered"}
 								className="rounded-full"
 								key={num}
+								isDisabled={num > 4 || num < 3}
 								onPress={() => router.push("/map?floor=" + num)}
 							>
 								{num}
