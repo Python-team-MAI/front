@@ -8,7 +8,7 @@ import { Card } from "@heroui/card";
 import { Avatar } from "@heroui/avatar";
 import { RxAvatar } from "react-icons/rx";
 import { Button } from "@heroui/button";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/navigation";
 import { useTranslations } from "next-intl";
 import { Input, Textarea } from "@heroui/input";
 import { Group, GroupSelector } from "@/entities/group";
@@ -44,16 +44,14 @@ export const ClientProfileEdit: FC<ClientProfileEditProps> = ({ groups, user, ac
 		try {
 			setSaving(true);
 
-			const res = await $fetch<false>("/auth/users/me", {
+			const res = await $fetch<false>("/auth/me", {
 				method: "PATCH",
 				headers: {
 					Authorization: `Bearer ${accessToken}`,
 					"Content-Type": "application/json",
 				},
-				data: formData,
+				data: { ...formData, institute: Number(formData.institute?.split("№")[1]) || undefined },
 			});
-
-			console.log(accessToken, formData);
 
 			if (res.status >= 300) {
 				throw new Error("Failed to update profile");

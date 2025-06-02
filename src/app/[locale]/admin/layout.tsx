@@ -20,16 +20,16 @@ export default async function AdminLayout({ children, params }: AdminLayoutProps
 	const { locale } = await params;
 
 	if (!token) {
-		redirect(`/${locale}/login`);
+		redirect(`/${locale || "ru"}/login`);
 	}
 
 	try {
 		const decoded = jwtDecode<JWTPayload>(token.value);
 		if (decoded.role !== "admin") {
-			redirect(`/${locale}`);
+			redirect(`/${locale || "ru"}`);
 		}
 	} catch {
-		redirect(`/${locale}/login`);
+		redirect(`/${locale || "ru"}/login`);
 	}
 
 	return (

@@ -11,6 +11,7 @@ import { RxAvatar } from "react-icons/rx";
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
 import { redirect } from "@/navigation";
+import axios from "axios";
 
 const Profile = async ({ params }: { params: Promise<{ locale: string }> }) => {
 	const cookieStore = await cookies();
@@ -27,23 +28,28 @@ const Profile = async ({ params }: { params: Promise<{ locale: string }> }) => {
 	const onSubmit = async (data: FormData) => {
 		"use server";
 		const email = data.get("email");
+		let isGood = false;
 
 		try {
-			const res = await $fetch("/auth/password-reset-request", {
+			const res = await axios(process.env.NEXT_PUBLIC_API_URL + "/mail/reset-password", {
 				method: "POST",
 				headers: {
 					Authorization: `Bearer ${accessToken}`,
 				},
-				body: JSON.stringify({ email }),
+				data: { addresses: [email], subject: "", message: "" },
 			});
 
-			console.log(await res.json(), res.status);
+			console.log(res.data);
 
-			if (res.ok) {
-				redirect({ href: "/change-password/email", locale });
+			if (res.status >= 200 && res.status < 300) {
+				isGood = true;
 			}
 		} catch (e) {
-			console.log(e);
+			console.log("error", e);
+		} finally {
+			if (isGood) {
+				redirect({ href: "/change-password/email", locale });
+			}
 		}
 	};
 

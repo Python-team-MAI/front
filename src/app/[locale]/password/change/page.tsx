@@ -1,51 +1,14 @@
-import { Input } from "@heroui/input";
-import { Button } from "@heroui/button";
 import React from "react";
-import { $fetch } from "@/fetch";
-import { Locale, redirect } from "@/navigation";
+import { cookies } from "next/headers";
+import { ACCESS_TOKEN } from "@/shared/constants/tokens";
+import { ChangePasswordContent } from "./content";
 
-const ForgotPasswordPage = async ({
-	params,
-	searchParams,
-}: {
-	params: Promise<{ locale: Locale }>;
-	searchParams: Promise<{ token: string }>;
-}) => {
-	const { locale } = await params;
+const ForgotPasswordPage = async ({ searchParams }: { searchParams: Promise<{ token: string }> }) => {
 	const { token } = await searchParams;
+	const cookieStore = await cookies();
+	const accessToken = cookieStore.get(ACCESS_TOKEN);
 
-	const onSubmit: (formData: FormData) => void | Promise<void> = async (formData) => {
-		"use server";
-		const password = formData.get("password");
-		const passwordConfirm = formData.get("password_confirm");
-
-		if (password !== passwordConfirm) {
-			return;
-		}
-
-		const res = await $fetch("/auth/password-reset-confirm/" + token, {
-			method: "POST",
-			body: JSON.stringify({
-				new_password: password,
-				confirm_new_password: passwordConfirm,
-			}),
-		});
-
-		if (res.ok) {
-			redirect({ href: "/ru/login", locale });
-		}
-	};
-
-	return (
-		<div className="h-[80vw] flex flex-col justify-center items-center">
-			<form className="w-1/2 flex flex-col gap-3" action={onSubmit}>
-				<h1 className="text-3xl">Введите свой email</h1>
-				<Input type="password" label="Пароль" name="password" required />
-				<Input type="password" label="Пароль снова" name="password_confirm" required />
-				<Button type="submit">Отправить</Button>
-			</form>
-		</div>
-	);
+	return <ChangePasswordContent accessToken={accessToken!.value} token={token} />;
 };
 
 export default ForgotPasswordPage;

@@ -23,7 +23,7 @@ interface AuthFormProps {
 	tg_id?: string;
 }
 
-const getPasswordLevel = (password: string): 0 | 1 | 2 | 3 => {
+export const getPasswordLevel = (password: string): 0 | 1 | 2 | 3 => {
 	if (password.length === 0) return 0;
 
 	const hasLower = /[a-z]/.test(password);
@@ -64,7 +64,7 @@ export const AuthForm: FC<AuthFormProps> = ({ type, tg_id }) => {
 				data: { email, password },
 			});
 
-			if (res.status === 200) {
+			if (res.status >= 200 && res.status < 300) {
 				if (type === "login") {
 					CookieManager.set(ACCESS_TOKEN, res.data.access_token, {
 						secure: process.env.NODE_ENV === "production",
@@ -89,8 +89,7 @@ export const AuthForm: FC<AuthFormProps> = ({ type, tg_id }) => {
 					});
 					router.push("/");
 					return;
-				}
-				if (type === "tg") {
+				} else if (type === "tg") {
 					CookieManager.set(ACCESS_TOKEN, res.data.access_token, {
 						secure: process.env.NODE_ENV === "production",
 						sameSite: "Strict",
@@ -148,7 +147,7 @@ export const AuthForm: FC<AuthFormProps> = ({ type, tg_id }) => {
 	};
 
 	return (
-		<form className="flex flex-col gap-2 w-full">
+		<div className="flex flex-col gap-2 w-full">
 			<Input
 				required
 				className="w-full"
@@ -198,12 +197,11 @@ export const AuthForm: FC<AuthFormProps> = ({ type, tg_id }) => {
 				onPress={onLogin}
 				color="primary"
 				className="w-full mt-2"
-				type="submit"
 				isDisabled={type === "register" && passwordLevel < 2}
 			>
 				{t(type === "register" ? "sign up" : "sign in")}
 			</Button>
 			{type === "login" && <Link href="/password/forgot">Забыли пароль?</Link>}
-		</form>
+		</div>
 	);
 };

@@ -14,6 +14,7 @@ export default async function SignInPage(props: {
 	const cookieManager = await cookies();
 	const accessToken = cookieManager.get(ACCESS_TOKEN);
 	const { locale } = await props.params;
+	console.log(accessToken);
 
 	if (accessToken) {
 		redirect({ locale, href: "/" });

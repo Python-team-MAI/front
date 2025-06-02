@@ -62,6 +62,6 @@ export async function GET(request: NextRequest) {
 		console.error("OAuth finalization error:", error);
 		return Response.json({ error: "Internal server error", details: error }, { status: 500 });
 	} finally {
-		redirect("/ru");
+		redirect("/ru?untouchable=true");
 	}
 }

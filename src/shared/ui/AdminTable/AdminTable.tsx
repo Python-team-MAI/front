@@ -16,6 +16,9 @@ import {
 import { Select, SelectItem } from "@heroui/select";
 import { axiosInstance } from "@/shared/lib/api/axios";
 import { useTheme } from "next-themes";
+import { $fetch } from "@/fetch";
+import { CookieManager } from "@/shared/lib/utils/cookie/cookie";
+import { ACCESS_TOKEN } from "@/shared/constants/tokens";
 
 interface TableItem {
 	id: number;
@@ -65,7 +68,12 @@ export function AdminTable({ title, endpoint, columns, createFields, updateField
 	const fetchData = async () => {
 		try {
 			setLoading(true);
-			const response = await axiosInstance.get(endpoint);
+			const accessToken = CookieManager.get(ACCESS_TOKEN);
+			const response = await $fetch<false>(endpoint, {
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+				},
+			});
 			setData(response.data);
 		} catch (error) {
 			console.error("Error fetching data:", error);
@@ -222,8 +230,8 @@ export function AdminTable({ title, endpoint, columns, createFields, updateField
 
 			<div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
 				<div className="overflow-x-auto">
-					<table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-						<thead className="bg-gray-50 dark:bg-gray-700">
+					<table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 min-h-[5vh]">
+						<thead className="bg-gray-50 dark:bg-gray-700 min-h-[20vh]">
 							<tr>
 								{columns.map((column) => (
 									<th

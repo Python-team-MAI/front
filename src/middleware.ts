@@ -15,7 +15,6 @@ export const notAuthRoutes = [
 	"/register/email",
 	"/register/success",
 	"/password/forgot",
-	"/password/change",
 	"/auth/tg-auth",
 	"/auth/tg-success",
 ];
