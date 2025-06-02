@@ -142,6 +142,7 @@
 }
 
 .messageText {
+  background-color: #2563eb;
   white-space: pre-wrap;
 }
 

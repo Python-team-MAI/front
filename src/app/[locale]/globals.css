@@ -5,11 +5,13 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --color-fg-default: #fff;
 }
 
 [data-theme='dark'] {
   --background: #0a0a0a;
   --foreground: #ededed;
+  --color-fg-default: #efefef
 }
 
 body, html {

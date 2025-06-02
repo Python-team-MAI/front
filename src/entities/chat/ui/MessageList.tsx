@@ -3,6 +3,7 @@ import { MessageRead } from "../model/types/message";
 import { Card } from "@heroui/card";
 import { CookieManager } from "@/shared/lib/utils/cookie/cookie";
 import { USER } from "@/shared/constants/tokens";
+import MarkdownPreview from '@uiw/react-markdown-preview';
 
 interface MessageListProps {
 	messages: MessageRead[];
@@ -47,7 +48,7 @@ export const MessageList: React.FC<MessageListProps> = ({ messages }) => {
 											{message?.user?.first_name} {message?.user?.last_name}
 										</div>
 									)}
-									<div>{message.text}</div>
+									<MarkdownPreview style={{background:"#6365f1", color: "#fff",  fontFamily: "Roboto" }} source={message.text}/>
 									<div className="text-xs mt-1 opacity-70 text-right">{formatTime(message.created_at)}</div>
 								</Card>
 							</div>

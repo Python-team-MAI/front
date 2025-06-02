@@ -12,6 +12,7 @@ import { Button } from "@heroui/button";
 import { $fetch } from "@/fetch";
 import { CookieManager } from "@/shared/lib/utils/cookie/cookie";
 import { ACCESS_TOKEN } from "@/shared/constants/tokens";
+import MarkdownPreview from "@uiw/react-markdown-preview";
 
 interface Message {
 	id: number;
@@ -157,7 +158,7 @@ export const AssistantWidget: React.FC = () => {
 								<div className={message.type === "user" ? styles.userMessageWrapper : styles.assistantMessageWrapper}>
 									<Avatar className={styles.messageAvatar}>
 										{message.type === "assistant" ? (
-											<Bot className={styles.smallIcon} />
+											<Bot className={styles.smallIcon}  />
 										) : (
 											<>
 												<User className={styles.smallIcon} />
@@ -168,7 +169,11 @@ export const AssistantWidget: React.FC = () => {
 									<Card className={message.type === "assistant" ? styles.assistantMessage : styles.userMessage}>
 										<div className={styles.messageContent}>
 											<div className={styles.messageTextWrapper}>
-												<div className={styles.messageText}>{message.text}</div>
+												{message.type === "assistant" ? (
+													<MarkdownPreview style={{background: "rgba(31, 41, 55, 0.8)", fontFamily: "Roboto"}} source={message.text} />
+												) : (
+													<div className={styles.messageText}>{message.text}</div>
+												)}
 												<div className={styles.messageTime}>{formatDate(message.created_at)}</div>
 											</div>
 										</div>
