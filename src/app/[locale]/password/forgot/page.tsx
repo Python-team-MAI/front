@@ -19,7 +19,7 @@ const ForgotPasswordPage = async ({ params }: { params: Promise<{ locale: Locale
 		});
 
 		if (res.ok) {
-			redirect({ href: "/ru/login", locale });
+			redirect({ href: "/login", locale });
 		}
 	};
 

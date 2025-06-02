@@ -16,7 +16,7 @@ export const notAuthRoutes = [
 	"/register/success",
 	"/password/forgot",
 	"/auth/tg-auth",
-	"/auth/tg-success",
+	// "/auth/tg-success",
 ];
 const notAuthApiRoutes = ["/api/oauth2/finalize"];
 
@@ -28,9 +28,11 @@ const getNotAuthRoutes = (locale: string) => [
 export async function middleware(request: NextRequest) {
 	const accessToken = request.cookies.get(ACCESS_TOKEN)?.value;
 	const refreshToken = request.cookies.get(REFRESH_TOKEN)?.value;
-
+	
 	const { pathname } = request.nextUrl;
 	const locale = checkLocale(pathname);
+	
+	console.log(pathname, accessToken, refreshToken, )
 
 	if (request.referrer.includes("/api")) {
 		return NextResponse.next();
@@ -59,7 +61,7 @@ export async function middleware(request: NextRequest) {
 				if (response.ok) {
 					const data = await response.json();
 
-					const res = NextResponse.redirect(request.url);
+					const res = NextResponse.next();
 
 					res.cookies.set(ACCESS_TOKEN, data.access_token, {
 						secure: process.env.NODE_ENV === "production",
@@ -90,6 +92,8 @@ export async function middleware(request: NextRequest) {
 				}
 			} catch (error) {
 				console.error("Ошибка при обновлении токена:", error);
+
+				return NextResponse.next()
 			}
 		}
 		const url = request.nextUrl.clone();

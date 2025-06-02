@@ -16,7 +16,6 @@ import {
 	REFRESH_TOKEN_EXPIRES_DAYS,
 	USER,
 } from "@/shared/constants/tokens";
-import axios from "axios";
 
 interface AuthFormProps {
 	type: "login" | "register" | "tg";
@@ -111,13 +110,12 @@ export const AuthForm: FC<AuthFormProps> = ({ type, tg_id }) => {
 						expires: new Date(Date.now() + REFRESH_TOKEN_EXPIRES_DAYS * 24 * 60 * 60 * 1000),
 						path: "/",
 					});
-					const tgRes = await axios(`${process.env.NEXT_PUBLIC_DOMAIN_URL}/telegram-webhook/auth`, {
+					const tgRes = await $fetch<false>(`/auth/tg-auth?tg_id=${tg_id}`, {
 						method: "POST",
 						headers: {
 							Authorization: `Bearer ${res.data.access_token}`,
 							"Content-Type": "application/json",
 						},
-						withCredentials: true,
 						data: {
 							telegram_id: tg_id,
 							first_name: user.data.first_name,
