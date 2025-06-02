@@ -117,11 +117,8 @@ export const AuthForm: FC<AuthFormProps> = ({ type, tg_id }) => {
 							"Content-Type": "application/json",
 						},
 						data: {
-							telegram_id: tg_id,
-							first_name: user.data.first_name,
-							last_name: user.data.last_name,
-							access_token: res.data.access_token,
-							refresh_token: res.data.refresh_token,
+							email,
+							password
 						},
 					});
 

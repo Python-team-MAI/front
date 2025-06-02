@@ -12,6 +12,7 @@ import { checkLocale } from "./shared/lib/utils/middleware/getLocale";
 export const notAuthRoutes = [
 	"/login",
 	"/register",
+	"/password/change",
 	"/register/email",
 	"/register/success",
 	"/password/forgot",
